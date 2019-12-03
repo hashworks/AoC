@@ -29,10 +29,10 @@ fn main() {
 
     let (part2_noun, part2_verb) = intcode::bruteforce(m, 19690720).unwrap();
     println!(
-        "part2: {} ({}ms)",
+        "part2: {} ({}µs)",
         100 * part2_noun + part2_verb,
-        s2.elapsed().as_millis()
+        s2.elapsed().as_micros()
     );
 
-    println!("Time: {}ms", s1.elapsed().as_millis());
+    println!("Time: {}µs", s1.elapsed().as_micros());
 }
