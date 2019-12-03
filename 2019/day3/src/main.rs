@@ -3,8 +3,9 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::time::Instant;
 
-fn part1(f: File, h: &dyn Fn((i32, i32), &(usize, i32), (usize, i32)) -> i32) -> i32 {
-    let mut ld = std::i32::MAX;
+fn part1_part2(f: File) -> (i32, i32) {
+    let mut lmd = std::i32::MAX;
+    let mut ls = std::i32::MAX;
     let mut ps: HashMap<(i32, i32), (usize, i32)> = HashMap::new();
 
     BufReader::new(f)
@@ -37,9 +38,13 @@ fn part1(f: File, h: &dyn Fn((i32, i32), &(usize, i32), (usize, i32)) -> i32) ->
                         if cp.0 != 0 && cp.1 != 0 {
                             if let Some(cs) = ps.get(&cp) {
                                 if cs.0 != l.0 {
-                                    let d = h(cp, cs, (l.0, sc));
-                                    if d < ld {
-                                        ld = d;
+                                    let md = cp.0.abs() + cp.1.abs();
+                                    let s = cs.1 + sc;
+                                    if md < lmd {
+                                        lmd = md;
+                                    }
+                                    if s < ls {
+                                        ls = s;
                                     }
                                 }
                             } else {
@@ -50,25 +55,15 @@ fn part1(f: File, h: &dyn Fn((i32, i32), &(usize, i32), (usize, i32)) -> i32) ->
                 });
         });
 
-    ld
+    (lmd, ls)
 }
 
 fn main() {
     let s1 = Instant::now();
 
-    println!(
-        "part1: {} ({}ms)",
-        part1(File::open("./input").unwrap(), &|cp, _, _| cp.0.abs()
-            + cp.1.abs()),
-        s1.elapsed().as_millis()
-    );
-
-    let s2 = Instant::now();
-    println!(
-        "part2: {} ({}ms)",
-        part1(File::open("./input").unwrap(), &|_, cs, cs2| cs.1 + cs2.1),
-        s2.elapsed().as_millis()
-    );
+    let (lmd, ls) = part1_part2(File::open("./input").unwrap());
+    println!("part1: {}", lmd);
+    println!("part2: {}", ls);
 
     println!("Time: {}ms", s1.elapsed().as_millis());
 }
