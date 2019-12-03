@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+use std::time::Instant;
 
 fn part1(f: File, h: &dyn Fn((i32, i32), &(usize, i32), (usize, i32)) -> i32) -> i32 {
     let mut ld = std::i32::MAX;
@@ -53,13 +54,21 @@ fn part1(f: File, h: &dyn Fn((i32, i32), &(usize, i32), (usize, i32)) -> i32) ->
 }
 
 fn main() {
+    let s1 = Instant::now();
+
     println!(
-        "part1: {}",
+        "part1: {} ({}ms)",
         part1(File::open("./input").unwrap(), &|cp, _, _| cp.0.abs()
-            + cp.1.abs())
+            + cp.1.abs()),
+        s1.elapsed().as_millis()
     );
+
+    let s2 = Instant::now();
     println!(
-        "part2: {}",
-        part1(File::open("./input").unwrap(), &|_, cs, cs2| cs.1 + cs2.1)
+        "part2: {} ({}ms)",
+        part1(File::open("./input").unwrap(), &|_, cs, cs2| cs.1 + cs2.1),
+        s2.elapsed().as_millis()
     );
+
+    println!("Time: {}ms", s1.elapsed().as_millis());
 }
