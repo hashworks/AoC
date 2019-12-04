@@ -9,4 +9,3 @@ edition = "2018"
 [dependencies]
 
 [dependencies.intcode]
-path = "../intcode"
