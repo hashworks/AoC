@@ -7,13 +7,17 @@ use std::thread::JoinHandle;
 mod tests {
     use super::*;
 
-    #[test]
-    fn day2_part1_tests() {
-        for (mut memory, noun, verb, expected_result) in vec![
+    fn day2_part1_testdata() -> Vec<(Vec<i32>, i32, i32, i32)> {
+        vec![
             (vec![1, 0, 0, 3, 2, 3, 11, 0, 99, 30, 40, 50], 9, 10, 3500),
             (vec![1, 0, 0, 0, 99], 0, 0, 2),
             (vec![1, 0, 1, 4, 99, 5, 6, 0, 99], 1, 1, 30),
-        ] {
+        ]
+    }
+
+    #[test]
+    fn day2_part1_tests() {
+        for (mut memory, noun, verb, expected_result) in day2_part1_testdata() {
             memory[1] = noun;
             memory[2] = verb;
             let (m, _) = compute(memory, vec![]);
@@ -22,11 +26,7 @@ mod tests {
     }
     #[test]
     fn day2_part1_tests_threaded() {
-        for (mut memory, noun, verb, expected_result) in vec![
-            (vec![1, 0, 0, 3, 2, 3, 11, 0, 99, 30, 40, 50], 9, 10, 3500),
-            (vec![1, 0, 0, 0, 99], 0, 0, 2),
-            (vec![1, 0, 1, 4, 99, 5, 6, 0, 99], 1, 1, 30),
-        ] {
+        for (mut memory, noun, verb, expected_result) in day2_part1_testdata() {
             memory[1] = noun;
             memory[2] = verb;
             let (_, _, _, return_rx) = compute_threaded(memory, None, None, None);
@@ -36,9 +36,8 @@ mod tests {
         }
     }
 
-    #[test]
-    fn day5_part2_tests() {
-        for (memory, input, expected_output) in vec![
+    fn day5_part2_testdata() -> Vec<(Vec<i32>, i32, i32)> {
+        vec![
             (vec![3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8], 8, 1),
             (vec![3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8], 9, 0),
             (vec![3, 9, 7, 9, 10, 9, 4, 9, 99, -1, 8], 7, 1),
@@ -47,7 +46,12 @@ mod tests {
             (vec![3, 3, 1108, -1, 8, 3, 4, 3, 99], 9, 0),
             (vec![3, 3, 1107, -1, 8, 3, 4, 3, 99], 7, 1),
             (vec![3, 3, 1107, -1, 8, 3, 4, 3, 99], 8, 0),
-        ] {
+        ]
+    }
+
+    #[test]
+    fn day5_part2_tests() {
+        for (memory, input, expected_output) in day5_part2_testdata() {
             let (_, output) = compute(memory, vec![input]);
             assert_eq!(output[0], expected_output);
         }
@@ -55,16 +59,7 @@ mod tests {
 
     #[test]
     fn day5_part2_tests_threaded() {
-        for (memory, input, expected_output) in vec![
-            (vec![3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8], 8, 1),
-            (vec![3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8], 9, 0),
-            (vec![3, 9, 7, 9, 10, 9, 4, 9, 99, -1, 8], 7, 1),
-            (vec![3, 9, 7, 9, 10, 9, 4, 9, 99, -1, 8], 8, 0),
-            (vec![3, 3, 1108, -1, 8, 3, 4, 3, 99], 8, 1),
-            (vec![3, 3, 1108, -1, 8, 3, 4, 3, 99], 9, 0),
-            (vec![3, 3, 1107, -1, 8, 3, 4, 3, 99], 7, 1),
-            (vec![3, 3, 1107, -1, 8, 3, 4, 3, 99], 8, 0),
-        ] {
+        for (memory, input, expected_output) in day5_part2_testdata() {
             if let (_, Some(input_tx), Some(output_rx), _) =
                 compute_threaded(memory, None, None, None)
             {
