@@ -19,8 +19,7 @@ fn main() {
         })
         .collect::<Vec<i32>>();
 
-    let part1_m = &mut m.clone();
-    let (_, part1_output) = intcode::compute(part1_m, &mut vec![1]);
+    let (_, part1_output) = intcode::compute(m.clone(), vec![1]);
     println!(
         "part1: {:?}, ({}µs)",
         part1_output,
@@ -29,8 +28,7 @@ fn main() {
 
     let s2 = Instant::now();
 
-    let part2_m = &mut m.clone();
-    let (_, part2_output) = intcode::compute(part2_m, &mut vec![5]);
+    let (_, part2_output) = intcode::compute(m, vec![5]);
     println!(
         "part2: {:?}, ({}µs)",
         part2_output,

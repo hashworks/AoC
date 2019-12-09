@@ -9,7 +9,7 @@ use std::time::Instant;
 fn main() {
     let s1 = Instant::now();
 
-    let m = BufReader::new(File::open("./input").unwrap())
+    let mut m = BufReader::new(File::open("./input").unwrap())
         .split(b',')
         .map(|ops| {
             str::from_utf8(&ops.unwrap())
@@ -19,11 +19,10 @@ fn main() {
         })
         .collect::<Vec<i32>>();
 
-    let part1_m = &mut m.clone();
-    part1_m[1] = 12;
-    part1_m[2] = 2;
-    let (part1_m0, _) = intcode::compute(part1_m, &mut vec![]);
-    println!("part1: {}, ({}µs)", part1_m0, s1.elapsed().as_micros());
+    m[1] = 12;
+    m[2] = 2;
+    let (part1_m, _) = intcode::compute(m.clone(), vec![]);
+    println!("part1: {}, ({}µs)", part1_m[0], s1.elapsed().as_micros());
 
     let s2 = Instant::now();
 
@@ -37,14 +36,14 @@ fn main() {
     println!("Time: {}µs", s1.elapsed().as_micros());
 }
 
-pub fn bruteforce(m: Vec<i32>, expected_m0: i32) -> Option<(i32, i32)> {
+pub fn bruteforce(m: Vec<i32>, expected_nm0: i32) -> Option<(i32, i32)> {
     for noun in 0..99 {
         for verb in 0..99 {
-            let m = &mut m.clone();
+            let mut m = m.clone();
             m[1] = noun;
             m[2] = verb;
-            let (m0, _) = intcode::compute(m, &mut vec![]);
-            if m0 == expected_m0 {
+            let (nm, _) = intcode::compute(m, vec![]);
+            if nm[0] == expected_nm0 {
                 return Some((noun, verb));
             }
         }
