@@ -71,5 +71,5 @@ fn main() {
     println!("part1: {}", lowest_manhattan_distance);
     println!("part2: {}", lowest_step_count);
 
-    println!("Time: {}ms", s1.elapsed().as_millis());
+    println!("Time: {}µs", s1.elapsed().as_micros());
 }
