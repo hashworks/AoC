@@ -20,21 +20,15 @@ fn main() {
         })
         .collect::<Vec<i64>>();
 
-    let (_, part1_output) = intcode::compute(m.clone(), vec![1]);
-    println!(
-        "part1: {:?}, ({}µs)",
-        part1_output,
-        s1.elapsed().as_micros()
-    );
+    let (_, part1_out) = intcode::compute(m.clone(), vec![1]);
+
+    println!("part1: {:?}, ({}µs)", part1_out, s1.elapsed().as_micros());
 
     let s2 = Instant::now();
 
-    let (_, part2_output) = intcode::compute(m, vec![5]);
-    println!(
-        "part2: {:?}, ({}µs)",
-        part2_output,
-        s2.elapsed().as_micros()
-    );
+    let (_, part2_out) = intcode::compute(m, vec![2]);
+
+    println!("part2: {:?}, ({}µs)", part2_out, s2.elapsed().as_micros());
 
     println!("time: {}µs", s1.elapsed().as_micros());
 }

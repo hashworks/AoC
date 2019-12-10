@@ -17,10 +17,10 @@ fn main() {
             str::from_utf8(&ops.unwrap())
                 .unwrap()
                 .trim()
-                .parse::<i32>()
+                .parse::<i64>()
                 .unwrap()
         })
-        .collect::<Vec<i32>>();
+        .collect::<Vec<i64>>();
 
     let mut max = 0;
 
@@ -41,11 +41,11 @@ fn main() {
     let s2 = Instant::now();
 
     for abcde in (5..10).permutations(5) {
-        let (a_input_tx, a_input_rx) = mpsc::channel::<i32>();
-        let (b_input_tx, b_input_rx) = mpsc::channel::<i32>();
-        let (c_input_tx, c_input_rx) = mpsc::channel::<i32>();
-        let (d_input_tx, d_input_rx) = mpsc::channel::<i32>();
-        let (e_input_tx, e_input_rx) = mpsc::channel::<i32>();
+        let (a_input_tx, a_input_rx) = mpsc::channel::<i64>();
+        let (b_input_tx, b_input_rx) = mpsc::channel::<i64>();
+        let (c_input_tx, c_input_rx) = mpsc::channel::<i64>();
+        let (d_input_tx, d_input_rx) = mpsc::channel::<i64>();
+        let (e_input_tx, e_input_rx) = mpsc::channel::<i64>();
         a_input_tx.send(abcde[0]).unwrap();
         a_input_tx.send(0).unwrap();
         b_input_tx.send(abcde[1]).unwrap();

@@ -14,10 +14,11 @@ fn main() {
         .map(|ops| {
             str::from_utf8(&ops.unwrap())
                 .unwrap()
-                .parse::<i32>()
-                .unwrap_or(0)
+                .trim()
+                .parse::<i64>()
+                .unwrap()
         })
-        .collect::<Vec<i32>>();
+        .collect::<Vec<i64>>();
 
     m[1] = 12;
     m[2] = 2;
@@ -36,7 +37,7 @@ fn main() {
     println!("Time: {}µs", s1.elapsed().as_micros());
 }
 
-pub fn bruteforce(m: Vec<i32>, expected_nm0: i32) -> Option<(i32, i32)> {
+pub fn bruteforce(m: Vec<i64>, expected_nm0: i64) -> Option<(i64, i64)> {
     for noun in 0..99 {
         for verb in 0..99 {
             let mut m = m.clone();

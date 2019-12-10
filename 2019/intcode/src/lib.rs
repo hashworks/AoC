@@ -7,7 +7,7 @@ use std::thread::JoinHandle;
 mod tests {
     use super::*;
 
-    fn day2_part1_testdata() -> Vec<(Vec<i32>, i32, i32, i32)> {
+    fn day2_part1_testdata() -> Vec<(Vec<i64>, i64, i64, i64)> {
         vec![
             (vec![1, 0, 0, 3, 2, 3, 11, 0, 99, 30, 40, 50], 9, 10, 3500),
             (vec![1, 0, 0, 0, 99], 0, 0, 2),
@@ -36,7 +36,7 @@ mod tests {
         }
     }
 
-    fn day5_part2_testdata() -> Vec<(Vec<i32>, i32, i32)> {
+    fn day5_part2_testdata() -> Vec<(Vec<i64>, i64, i64)> {
         vec![
             (vec![3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8], 8, 1),
             (vec![3, 9, 8, 9, 10, 9, 4, 9, 99, -1, 8], 9, 0),
@@ -70,6 +70,28 @@ mod tests {
     }
 
     #[test]
+    fn day9_part1_tests() {
+        for (memory, expected_output) in vec![
+            (
+                vec![
+                    109, 1, 204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99,
+                ],
+                vec![
+                    109, 1, 204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99,
+                ],
+            ),
+            (
+                vec![1102, 34915192, 34915192, 7, 4, 7, 99, 0],
+                vec![1219070632396864],
+            ),
+            (vec![104, 1125899906842624, 99], vec![1125899906842624]),
+        ] {
+            let (_, output) = compute(memory, vec![]);
+            assert_eq!(output, expected_output);
+        }
+    }
+
+    #[test]
     fn intcode_parser_tests() {
         for (intcode, expected_result) in vec![
             (00099, (99, 0, 0, 0)),
@@ -84,7 +106,7 @@ mod tests {
     }
 }
 
-fn intcode_parser(intcode: i32) -> (i32, i32, i32, i32) {
+fn intcode_parser(intcode: i64) -> (i64, i64, i64, i64) {
     assert!(intcode >= 0);
     assert!(intcode < 100000);
     let mut instruction = intcode;
@@ -104,89 +126,144 @@ fn intcode_parser(intcode: i32) -> (i32, i32, i32, i32) {
     )
 }
 
-// get_parameter_value
-fn gpv(m: &Vec<i32>, memory_cell: i32, parameter_mode: i32) -> i32 {
+fn allocate_memory_for_index(m: &mut Vec<i64>, requested_index: usize) -> usize {
+    if m.len() < requested_index + 1 {
+        m.resize(requested_index + 1, 0);
+    }
+    requested_index
+}
+
+fn read_value(
+    m: &mut Vec<i64>,
+    memory_cell: usize,
+    parameter_mode: i64,
+    relative_base: i64,
+) -> i64 {
+    allocate_memory_for_index(m, memory_cell);
+    let memory_cell = m[memory_cell];
     match parameter_mode {
-        0 => m[memory_cell as usize],
-        1 => memory_cell,
-        pm => panic!(format!("unknown parameter mode '{}'", pm)),
+        0 => {
+            let memory_cell = allocate_memory_for_index(m, memory_cell as usize);
+            m[memory_cell]
+        }
+        1 => memory_cell as i64,
+        2 => {
+            let memory_cell = allocate_memory_for_index(m, (relative_base + memory_cell) as usize);
+            m[memory_cell]
+        }
+        pm => panic!(format!("unknown read parameter mode '{}'", pm)),
     }
 }
 
+fn write_value(
+    m: &mut Vec<i64>,
+    memory_cell: usize,
+    parameter_mode: i64,
+    relative_base: i64,
+    value: i64,
+) {
+    allocate_memory_for_index(m, memory_cell);
+    let memory_cell = m[memory_cell];
+    match parameter_mode {
+        0 => {
+            let memory_cell = allocate_memory_for_index(m, memory_cell as usize);
+            m[memory_cell] = value
+        }
+        2 => {
+            let memory_cell = allocate_memory_for_index(m, (relative_base + memory_cell) as usize);
+            m[memory_cell] = value
+        }
+        pm => panic!(format!("unknown write parameter mode '{}'", pm)),
+    };
+}
+
 fn c_internal(
-    m: Vec<i32>,
-    get_input: &dyn Fn(usize) -> i32,
-    post_output: &dyn Fn(&mut Vec<i32>, i32),
-) -> (Vec<i32>, Vec<i32>) {
+    m: Vec<i64>,
+    get_input: &dyn Fn(usize) -> i64,
+    post_output: &dyn Fn(&mut Vec<i64>, i64),
+) -> (Vec<i64>, Vec<i64>) {
     let mut m = m;
 
     let mut input_index = 0;
     let mut outputs = vec![];
 
+    let mut rb = 0;
     let mut i = 0;
     while i <= m.len() {
-        let (ins, pm1, pm2, _) = intcode_parser(m[i]);
+        let (ins, pm1, pm2, pm3) = intcode_parser(m[i]);
         match ins {
             99 => break,
             1 => {
                 // add
-                let target = m[i + 3] as usize;
-                m[target] = gpv(&m, m[i + 1], pm1) + gpv(&m, m[i + 2], pm2);
+                let operand_1 = read_value(&mut m, i + 1, pm1, rb);
+                let operand_2 = read_value(&mut m, i + 2, pm2, rb);
+                write_value(&mut m, i + 3, pm3, rb, operand_1 + operand_2);
                 i += 4;
             }
             2 => {
                 // mul
-                let target = m[i + 3] as usize;
-                m[target] = gpv(&m, m[i + 1], pm1) * gpv(&m, m[i + 2], pm2);
+                let operand_1 = read_value(&mut m, i + 1, pm1, rb);
+                let operand_2 = read_value(&mut m, i + 2, pm2, rb);
+                write_value(&mut m, i + 3, pm3, rb, operand_1 * operand_2);
                 i += 4;
             }
             3 => {
                 // input
-                let target = m[i + 1] as usize;
-                m[target] = get_input(input_index);
+                write_value(&mut m, i + 1, pm1, rb, get_input(input_index));
                 input_index += 1;
                 i += 2;
             }
             4 => {
                 // output
-                post_output(&mut outputs, gpv(&m, m[i + 1], pm1));
+                post_output(&mut outputs, read_value(&mut m, i + 1, pm1, rb));
                 i += 2;
             }
             5 => {
                 // jump-if-true
-                if gpv(&m, m[i + 1], pm1) != 0 {
-                    i = gpv(&m, m[i + 2], pm2) as usize;
+                if read_value(&mut m, i + 1, pm1, rb) != 0 {
+                    i = read_value(&mut m, i + 2, pm2, rb) as usize;
                 } else {
                     i += 3;
                 }
             }
             6 => {
                 // jump-if-false
-                if gpv(&m, m[i + 1], pm1) == 0 {
-                    i = gpv(&m, m[i + 2], pm2) as usize;
+                if read_value(&mut m, i + 1, pm1, rb) == 0 {
+                    i = read_value(&mut m, i + 2, pm2, rb) as usize;
                 } else {
                     i += 3;
                 }
             }
             7 => {
                 // less than
-                let target = m[i + 3] as usize;
-                m[target] = if gpv(&m, m[i + 1], pm1) < gpv(&m, m[i + 2], pm2) {
-                    1
-                } else {
-                    0
-                };
+                let comparator_l = read_value(&mut m, i + 1, pm1, rb);
+                let comparator_r = read_value(&mut m, i + 2, pm2, rb);
+                write_value(
+                    &mut m,
+                    i + 3,
+                    pm3,
+                    rb,
+                    if comparator_l < comparator_r { 1 } else { 0 },
+                );
                 i += 4;
             }
             8 => {
                 // equals
-                let target = m[i + 3] as usize;
-                m[target] = if gpv(&m, m[i + 1], pm1) == gpv(&m, m[i + 2], pm2) {
-                    1
-                } else {
-                    0
-                };
+                let comparator_l = read_value(&mut m, i + 1, pm1, rb);
+                let comparator_r = read_value(&mut m, i + 2, pm2, rb);
+                write_value(
+                    &mut m,
+                    i + 3,
+                    pm3,
+                    rb,
+                    if comparator_l == comparator_r { 1 } else { 0 },
+                );
                 i += 4;
+            }
+            9 => {
+                // relative base offset
+                rb += read_value(&mut m, i + 1, pm1, rb);
+                i += 2;
             }
             ins => panic!(format!("unknown instruction '{}'", ins)),
         }
@@ -194,39 +271,39 @@ fn c_internal(
     (m, outputs)
 }
 
-pub fn compute(m: Vec<i32>, inputs: Vec<i32>) -> (Vec<i32>, Vec<i32>) {
+pub fn compute(m: Vec<i64>, inputs: Vec<i64>) -> (Vec<i64>, Vec<i64>) {
     let (m, outputs) = c_internal(m, &|i| inputs[i], &|outputs, o| outputs.push(o));
 
     (m, outputs)
 }
 
 pub fn compute_threaded(
-    m: Vec<i32>,
-    input_rx: Option<Receiver<i32>>,
-    output_tx: Option<Sender<i32>>,
-    return_tx: Option<Sender<(Vec<i32>, Receiver<i32>, Sender<i32>)>>,
+    m: Vec<i64>,
+    input_rx: Option<Receiver<i64>>,
+    output_tx: Option<Sender<i64>>,
+    return_tx: Option<Sender<(Vec<i64>, Receiver<i64>, Sender<i64>)>>,
 ) -> (
     JoinHandle<()>,
-    Option<Sender<i32>>,
-    Option<Receiver<i32>>,
-    Option<Receiver<(Vec<i32>, Receiver<i32>, Sender<i32>)>>,
+    Option<Sender<i64>>,
+    Option<Receiver<i64>>,
+    Option<Receiver<(Vec<i64>, Receiver<i64>, Sender<i64>)>>,
 ) {
     let (maybe_input_tx, input_rx) = if let Some(input_rx) = input_rx {
         (None, input_rx)
     } else {
-        let (input_tx, input_rx) = mpsc::channel::<i32>();
+        let (input_tx, input_rx) = mpsc::channel::<i64>();
         (Some(input_tx), input_rx)
     };
     let (output_tx, maybe_output_rx) = if let Some(output_tx) = output_tx {
         (output_tx, None)
     } else {
-        let (output_tx, output_rx) = mpsc::channel::<i32>();
+        let (output_tx, output_rx) = mpsc::channel::<i64>();
         (output_tx, Some(output_rx))
     };
     let (return_tx, maybe_return_rx) = if let Some(return_tx) = return_tx {
         (return_tx, None)
     } else {
-        let (return_tx, return_rx) = mpsc::channel::<(Vec<i32>, Receiver<i32>, Sender<i32>)>();
+        let (return_tx, return_rx) = mpsc::channel::<(Vec<i64>, Receiver<i64>, Sender<i64>)>();
         (return_tx, Some(return_rx))
     };
     (
