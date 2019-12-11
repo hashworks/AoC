@@ -88,7 +88,7 @@ fn main() {
 
     let s2 = Instant::now();
 
-    let (painted_panels, min_x, min_y, max_x, max_y) = emergency_hull_painting_robot(m.clone(), 1);
+    let (painted_panels, min_x, min_y, max_x, max_y) = emergency_hull_painting_robot(m, 1);
 
     for y in (min_y..max_y + 1).rev() {
         for x in min_x..max_x + 1 {
