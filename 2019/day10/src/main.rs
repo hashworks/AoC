@@ -69,7 +69,7 @@ fn main() {
     let af = create_asteroid_field_from_file("./input");
 
     let mut monitoring_station = (0, 0);
-    let mut monitoring_station_sees: Vec<((i64, i64), i64)> = vec![];
+    let mut monitoring_station_sees: Vec<(i64, i64)> = vec![];
     for a in af.clone().asteroids {
         let mut af_from_a = af.clone();
         af_from_a.asteroids.remove(&a);
@@ -77,11 +77,7 @@ fn main() {
             af_from_a.remove_shadowed_from_b_by_a(a, b);
         }
         if af_from_a.asteroids.len() > monitoring_station_sees.len() {
-            monitoring_station_sees = af_from_a
-                .asteroids
-                .into_iter()
-                .map(|pos| (pos, 0))
-                .collect();
+            monitoring_station_sees = af_from_a.asteroids.into_iter().collect();
             monitoring_station = a;
         }
     }
@@ -97,21 +93,22 @@ fn main() {
 
     assert!(monitoring_station_sees.len() >= 200);
 
-    let mut i = 0;
-    while i < monitoring_station_sees.len() - 1 {
-        let mut angle = ((monitoring_station.1 - (monitoring_station_sees[i].0).1) as f64)
-            .atan2((monitoring_station.0 - (monitoring_station_sees[i].0).0) as f64);
-        if angle < std::f64::consts::PI / 2.0 {
-            angle += std::f64::consts::PI * 1.5;
-        }
-        monitoring_station_sees[i].1 = (angle * 1000.0) as i64;
-        i += 1;
-    }
-    monitoring_station_sees.sort_by(|a, b| a.1.cmp(&b.1));
+    let mut monitoring_station_sees = monitoring_station_sees
+        .into_iter()
+        .map(|(x, y)| {
+            let mut angle =
+                ((monitoring_station.1 - y) as f64).atan2((monitoring_station.0 - x) as f64);
+            if angle < std::f64::consts::PI / 2.0 {
+                angle += std::f64::consts::PI * 1.5;
+            }
+            (x, y, (angle * 1000.0) as i64)
+        })
+        .collect::<Vec<(i64, i64, i64)>>();
+    monitoring_station_sees.sort_by(|a, b| a.2.cmp(&b.2));
 
     println!(
         "part2: {}, ({}µs)",
-        (monitoring_station_sees[199].0).0 * 100 + (monitoring_station_sees[199].0).1,
+        monitoring_station_sees[199].0 * 100 + monitoring_station_sees[199].1,
         s2.elapsed().as_micros()
     );
 
