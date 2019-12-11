@@ -18,3 +18,4 @@ This years solutions will be done in Rust.
 | 8   |   158µs |    29µs |   195µs |
 | 9   |    85µs |  4163µs |  4259µs |
 | 10  | 19812µs |    37µs | 19866µs |
+| 11  | 17649µs |   345µs | 18006µs |
