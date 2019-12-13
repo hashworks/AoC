@@ -20,19 +20,16 @@ fn main() {
         })
         .collect::<Vec<i64>>();
 
-    let (_, _, output_rx, result_rx) = intcode::compute_threaded(m.clone(), None, None, None);
-    let output_rx = output_rx.unwrap();
-    let result_rx = result_rx.unwrap();
+    let (_, mut output) = intcode::compute(m.clone(), vec![]);
 
     let mut counter = 0;
 
-    while result_rx.try_recv().is_err() {
-        if let Ok(_) = output_rx.try_recv() {
-            output_rx.recv().unwrap();
-            if output_rx.recv().unwrap() == 2 {
-                counter += 1;
-            }
+    while let Some(tile_id) = output.pop() {
+        if tile_id == 2 {
+            counter += 1;
         }
+        output.pop().unwrap();
+        output.pop().unwrap();
     }
 
     println!("part1: {:?}, ({}µs)", counter, s1.elapsed().as_micros());
@@ -51,9 +48,9 @@ fn main() {
 
     while result_rx.try_recv().is_err() {
         if let Ok(x) = output_rx.try_recv() {
-            let y = output_rx.recv().unwrap();
+            output_rx.recv().unwrap();
             let value = output_rx.recv().unwrap();
-            if x == -1 && y == 0 {
+            if x == -1 {
                 score = value;
             } else {
                 match value {
