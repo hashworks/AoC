@@ -21,4 +21,4 @@ This years solutions will be done in Rust.
 | 11  | 16239µs |   315µs | 16564µs |
 | 12  |   398µs |    TODO |    TODO |
 | 13  |   379µs | 20785µs | 21179µs |
-
+| 14  |   384µs |  7817µs |  8215µs |
