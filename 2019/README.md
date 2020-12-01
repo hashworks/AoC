@@ -2,7 +2,7 @@
 
 https://adventofcode.com/2019/
 
-This years solutions will be done in Rust.
+Solutions will be done in Rust.
 
 ## Runtimes (i5-6600K)
 
