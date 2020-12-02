@@ -9,14 +9,14 @@ use nom::{
     IResult,
 };
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug)]
 pub struct Policy {
     pub min: usize,
     pub max: usize,
     pub char: char,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug)]
 pub struct Password {
     pub policy: Policy,
     pub password: String,
