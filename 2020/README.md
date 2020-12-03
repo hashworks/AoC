@@ -2,7 +2,7 @@
 
 https://adventofcode.com/2020/
 
-Solutions will be done in Rust. All part times include parsing, except parts where it made no sense (marked with `*`).
+Solutions will be done in Rust. All part times include individual parsing, except parts where it made no sense at all to parse twice (marked with `*`).
 
 ## Runtimes (i5-6600K)
 
