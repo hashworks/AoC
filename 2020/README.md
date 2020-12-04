@@ -11,3 +11,4 @@ Solutions will be done in Rust. All part times include individual parsing, excep
 | 1   |    27µs |   131µs |   158µs |
 | 2   |   128µs |   147µs |   298µs |
 | 3*  |    56µs |     7µs |    73µs |
+| 4   |   468µs |   515µs |   991µs |
