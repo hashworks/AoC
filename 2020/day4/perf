@@ -1,0 +1,14 @@
+
+ Performance counter stats for './target/release/aoc-2020-day4' (1000 runs):
+
+              0.65 msec task-clock:u              #    0.754 CPUs utilized            ( +-  0.12% )
+                 0      context-switches:u        #    0.000 K/sec                  
+                 0      cpu-migrations:u          #    0.000 K/sec                  
+                81      page-faults:u             #    0.126 M/sec                    ( +-  0.06% )
+         1,585,008      cycles:u                  #    2.453 GHz                      ( +-  0.07% )
+         3,571,198      instructions:u            #    2.25  insn per cycle           ( +-  0.00% )
+           753,638      branches:u                # 1166.333 M/sec                    ( +-  0.00% )
+            15,317      branch-misses:u           #    2.03% of all branches          ( +-  0.08% )
+
+        0.00085646 +- 0.00000244 seconds time elapsed  ( +-  0.29% )
+
