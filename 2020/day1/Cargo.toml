@@ -1,5 +1,5 @@
 [package]
-name = "2020-day1"
+name = "aoc-2020-day1"
 version = "0.1.0"
 authors = ["hashworks <mail@hashworks.net>"]
 edition = "2018"
