@@ -16,9 +16,8 @@ fn part1(f: File) -> usize {
         .map(seat_to_id).max().unwrap()
 }
 
-// We assert that max() is <= 1000, increase if necessary
 fn part2(f: File) -> usize {
-    let mut seats: [bool; 1000] = [false; 1000];
+    let mut seats: [bool; 1024] = [false; 1024]; // 1111111111b+1
 
     BufReader::new(f)
         .lines()
@@ -34,7 +33,7 @@ fn part2(f: File) -> usize {
          .unwrap().0
 }
 
-fn _part2_slow_but_stable(f: File) -> usize {
+fn _part2_slow(f: File) -> usize {
     let mut seats = BufReader::new(f)
                     .lines()
                     .map(|r| r.unwrap())
