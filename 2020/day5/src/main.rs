@@ -34,6 +34,21 @@ fn part2(f: File) -> usize {
          .unwrap().0
 }
 
+fn _part2_slow_but_stable(f: File) -> usize {
+    let mut seats = BufReader::new(f)
+                    .lines()
+                    .map(|r| r.unwrap())
+                    .map(seat_to_id)
+                    .collect::<Vec<usize>>();
+    seats.sort();
+    seats.iter()
+         .zip(seats.iter().skip(1))
+         .filter(|(&a,&b)| a+1 != b)
+         .take(1)
+         .next()
+         .unwrap().0 + 1
+}
+
 fn main() {
     let s1 = Instant::now();
 
