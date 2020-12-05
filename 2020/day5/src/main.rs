@@ -3,9 +3,9 @@ use std::fs::File;
 use std::time::Instant;
 
 fn seat_to_id(seat: String) -> usize {
-    seat.chars().enumerate().fold(0, |a, (i, c)| match c {
-        'B' | 'R' => (1 << 9-i) + a,
-        _ => a
+    seat.chars().fold(0, |a, c| (a << 1) + match c {
+        'B' | 'R' => 1,
+        _ => 0
     })
 }
 
