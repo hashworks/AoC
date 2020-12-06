@@ -21,10 +21,9 @@ fn _part2_slow(qd: &String) -> usize {
                 .lines()
                 .map(|l| l.chars().collect::<HashSet<char>>())
                 .fold(None, |maybe_set1: Option<HashSet<char>>, set2| {
-                    Some(match maybe_set1 {
-                        None => set2,
-                        Some(set1) => set1.intersection(&set2).map(|c| *c).collect(),
-                    })
+                    maybe_set1
+                        .map(|set1| set1.intersection(&set2).map(|c| *c).collect())
+                        .or(Some(set2))
                 })
                 .unwrap()
                 .len()
