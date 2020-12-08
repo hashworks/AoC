@@ -13,7 +13,7 @@ fn parse(ins: &str, pc: usize, acc: i32) -> (usize, i32) {
 }
 
 fn part1(bc: &Vec<&str>) -> i32 {
-    let mut seen_pc: HashSet<usize> = HashSet::new();
+    let mut seen_pc = HashSet::new();
     let mut reg = (0, 0);
     loop {
         if seen_pc.insert(reg.0) {
@@ -65,7 +65,7 @@ fn main() {
     let s1 = Instant::now();
 
     let str = read_to_string("input").unwrap();
-    let boot_code: Vec<&str> = str.lines().collect();
+    let boot_code = str.lines().collect();
 
     println!(
         "part1: {} ({}µs)",
