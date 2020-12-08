@@ -4,10 +4,10 @@ use std::time::Instant;
 
 fn parse(ins: &str, pc: usize, acc: i32) -> (usize, i32) {
     match &ins[0..5] {
-        "acc +" => (pc + 1, acc + *&ins[5..].parse::<i32>().unwrap()),
-        "acc -" => (pc + 1, acc - *&ins[5..].parse::<i32>().unwrap()),
-        "jmp +" => (pc + *&ins[5..].parse::<usize>().unwrap(), acc),
-        "jmp -" => (pc - *&ins[5..].parse::<usize>().unwrap(), acc),
+        "acc +" => (pc + 1, acc + ins[5..].parse::<i32>().unwrap()),
+        "acc -" => (pc + 1, acc - ins[5..].parse::<i32>().unwrap()),
+        "jmp +" => (pc + ins[5..].parse::<usize>().unwrap(), acc),
+        "jmp -" => (pc - ins[5..].parse::<usize>().unwrap(), acc),
         _ => (pc + 1, acc),
     }
 }
@@ -28,8 +28,8 @@ fn parse_alternate(ins: &str, pc: usize, acc: i32) -> Option<(usize, i32)> {
     match &ins[0..5] {
         "jmp +" => Some((pc + 1, acc)),
         "jmp -" => Some((pc + 1, acc)),
-        "nop +" => Some((pc + *&ins[5..].parse::<usize>().unwrap(), acc)),
-        "nop -" => Some((pc - *&ins[5..].parse::<usize>().unwrap(), acc)),
+        "nop +" => Some((pc + ins[5..].parse::<usize>().unwrap(), acc)),
+        "nop -" => Some((pc - ins[5..].parse::<usize>().unwrap(), acc)),
         _ => None,
     }
 }
