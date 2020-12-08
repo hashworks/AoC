@@ -2,42 +2,35 @@ use std::collections::HashSet;
 use std::fs::read_to_string;
 use std::time::Instant;
 
-fn part1_parse(ins: &str, pc: usize, acc: u32) -> (usize, u32) {
+fn parse(ins: &str, pc: usize, acc: i32) -> (usize, i32) {
     match &ins[0..5] {
-        "acc +" => (pc + 1, acc + *&ins[5..].parse::<u32>().unwrap()),
-        "acc -" => (pc + 1, acc - *&ins[5..].parse::<u32>().unwrap()),
+        "acc +" => (pc + 1, acc + *&ins[5..].parse::<i32>().unwrap()),
+        "acc -" => (pc + 1, acc - *&ins[5..].parse::<i32>().unwrap()),
         "jmp +" => (pc + *&ins[5..].parse::<usize>().unwrap(), acc),
         "jmp -" => (pc - *&ins[5..].parse::<usize>().unwrap(), acc),
         _ => (pc + 1, acc),
     }
 }
 
-fn part1(bc: &Vec<&str>) -> u32 {
+fn part1(bc: &Vec<&str>) -> i32 {
     let mut seen_pc: HashSet<usize> = HashSet::new();
-    let mut pc = 0;
-    let mut acc = 0;
+    let mut reg = (0, 0);
     loop {
-        if !seen_pc.contains(&pc) {
-            seen_pc.insert(pc);
-            let (new_pc, new_bar) = part1_parse(bc.get(pc).unwrap(), pc, acc);
-            pc = new_pc;
-            acc = new_bar;
+        if seen_pc.insert(reg.0) {
+            reg = parse(bc.get(reg.0).unwrap(), reg.0, reg.1);
         } else {
-            return acc;
+            return reg.1;
         }
     }
 }
 
-fn part2_parse(ins: &str, pc: usize, acc: i32) -> ((usize, i32), Option<(usize, i32)>) {
-    let count = *&ins[5..].parse::<usize>().unwrap();
+fn parse_alternate(ins: &str, pc: usize, acc: i32) -> Option<(usize, i32)> {
     match &ins[0..5] {
-        "acc +" => ((pc + 1, acc + count as i32), None),
-        "acc -" => ((pc + 1, acc - count as i32), None),
-        "jmp +" => ((pc + count, acc), Some((pc + 1, acc))),
-        "jmp -" => ((pc - count, acc), Some((pc + 1, acc))),
-        "nop +" => ((pc + 1, acc), Some((pc + count, acc))),
-        "nop -" => ((pc + 1, acc), Some((pc - count, acc))),
-        _ => panic!("Unknown instruction"),
+        "jmp +" => Some((pc + 1, acc)),
+        "jmp -" => Some((pc + 1, acc)),
+        "nop +" => Some((pc + *&ins[5..].parse::<usize>().unwrap(), acc)),
+        "nop -" => Some((pc - *&ins[5..].parse::<usize>().unwrap(), acc)),
+        _ => None,
     }
 }
 
@@ -46,18 +39,17 @@ fn part2_run(
     pc: usize,
     acc: i32,
     altered: &bool,
-    mut seen_pc: HashSet<usize>,
+    seen_pc: &mut HashSet<usize>,
 ) -> Option<i32> {
-    if seen_pc.contains(&pc) {
-        return None;
-    }
-    if let Some(line) = funcs.get(pc) {
-        seen_pc.insert(pc);
-        let ((new_pc, new_acc), alternate) = part2_parse(line, pc, acc);
-        let mut result = part2_run(funcs, new_pc, new_acc, altered, seen_pc.clone());
-        if result.is_none() && !altered && alternate.is_some() {
-            let (new_pc, new_acc) = alternate.unwrap();
-            result = part2_run(funcs, new_pc, new_acc, &true, seen_pc.clone());
+    if !seen_pc.insert(pc) {
+        None
+    } else if let Some(line) = funcs.get(pc) {
+        let (new_pc, new_acc) = parse(line, pc, acc);
+        let mut result = part2_run(funcs, new_pc, new_acc, altered, seen_pc);
+        if result.is_none() && !altered {
+            if let Some((new_pc, new_acc)) = parse_alternate(line, pc, acc) {
+                result = part2_run(funcs, new_pc, new_acc, &true, seen_pc);
+            }
         }
         result
     } else {
@@ -66,7 +58,7 @@ fn part2_run(
 }
 
 fn part2(bc: &Vec<&str>) -> i32 {
-    part2_run(bc, 0, 0, &false, HashSet::new()).unwrap()
+    part2_run(bc, 0, 0, &false, &mut HashSet::new()).unwrap()
 }
 
 fn main() {

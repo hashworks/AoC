@@ -15,4 +15,4 @@ Solutions will be done in Rust. All part times include individual parsing, excep
 |    5 |   75µs |   71µs | 153µs |             802µs |
 |    6 |   66µs |   79µs | 152µs |             730µs |
 |    7 |  384µs |  322µs | 715µs |            1329µs |
-|    8 |   44µs |  572µs | 624µs |            1343µs |
+|    8 |   40µs |   30µs |  80µs |             664µs |
