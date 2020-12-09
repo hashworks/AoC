@@ -1,0 +1,14 @@
+
+ Performance counter stats for './target/release/aoc-2020-day9' (1000 runs):
+
+              1.32 msec task-clock:u              #    0.859 CPUs utilized            ( +-  0.12% )
+                 0      context-switches:u        #    0.000 K/sec                  
+                 0      cpu-migrations:u          #    0.000 K/sec                  
+               108      page-faults:u             #    0.082 M/sec                    ( +-  0.05% )
+         4,475,334      cycles:u                  #    3.389 GHz                      ( +-  0.14% )
+        13,494,769      instructions:u            #    3.02  insn per cycle           ( +-  0.00% )
+         1,502,564      branches:u                # 1137.881 M/sec                    ( +-  0.01% )
+            17,423      branch-misses:u           #    1.16% of all branches          ( +-  0.21% )
+
+        0.00153812 +- 0.00000519 seconds time elapsed  ( +-  0.34% )
+
