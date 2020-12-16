@@ -20,3 +20,7 @@ Solutions will be done in Rust. All part times include individual parsing, excep
 |  10* |    15µs |    1µs |  16µs |             596µs |
 |   11 | 16000µs |   TODO |  TODO |              TODO |
 |   12 |    27µs |   17µs |  50µs |             632µs |
+|   13 |    TODO |   TODO |  TODO |              TODO |
+|   14 |    TODO |   TODO |  TODO |              TODO |
+|   15 |    TODO |   TODO |  TODO |              TODO |
+|  16* |   166µs |  193µs | 363µs |             958µs |
