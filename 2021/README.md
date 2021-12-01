@@ -8,4 +8,4 @@ Solutions will be done in Rust. Total includes disk read and parse times.
 
 |  Day |  Part 1 | Part 2 | Total | perf stat -r 1000 |
 | ---: | ------: | -----: | ----: | ----------------: |
-|    1 |   490ns |    4µs | 108µs |             568µs |
+|    1 |   500ns |  500ns |  92µs |             549µs |

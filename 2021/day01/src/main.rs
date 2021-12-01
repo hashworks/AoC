@@ -41,17 +41,33 @@ fn _part2_zip(measurements: &Vec<usize>) -> usize {
 
 // https://doc.rust-lang.org/std/vec/struct.Vec.html#method.windows
 
-fn part1_windows(measurements: &Vec<usize>) -> usize {
+fn _part1_windows(measurements: &Vec<usize>) -> usize {
     measurements.windows(2).filter(|&w| w[0] < w[1]).count()
 }
 
-fn part2_windows(measurements: &Vec<usize>) -> usize {
-    part1_windows(
+fn _part2_windows(measurements: &Vec<usize>) -> usize {
+    _part1_windows(
         &measurements
             .windows(3)
             .map(|w| w.iter().sum())
             .collect::<Vec<usize>>(),
     )
+}
+
+fn part1_math(measurements: &Vec<usize>) -> usize {
+    solution_math(2, measurements)
+}
+
+fn part2_math(measurements: &Vec<usize>) -> usize {
+    solution_math(4, measurements)
+}
+
+// math solution: the sum of the second window contains parts of the first window, no need for sum
+fn solution_math(window_size: usize, measurements: &Vec<usize>) -> usize {
+    measurements
+        .windows(window_size)
+        .filter(|&w| w[window_size - 1] > w[0])
+        .count()
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -67,15 +83,15 @@ fn main() -> Result<(), Box<dyn Error>> {
     let s_part1 = Instant::now();
     println!(
         "part1: {} ({}ns)",
-        part1_windows(&measurements),
+        part1_math(&measurements),
         s_part1.elapsed().as_nanos()
     );
 
     let s_part2 = Instant::now();
     println!(
-        "part2: {} ({}µs)",
-        part2_windows(&measurements),
-        s_part2.elapsed().as_micros()
+        "part2: {} ({}ns)",
+        part2_math(&measurements),
+        s_part2.elapsed().as_nanos()
     );
 
     println!("Time: {}µs", start.elapsed().as_micros());
@@ -105,12 +121,24 @@ fn test_part2_example() {
 
 #[test]
 fn test_part1_windows_example() {
-    assert_eq!(0, part1_windows(&[].to_vec()));
-    assert_eq!(7, part1_windows(&_EXAMPLE.to_vec()));
+    assert_eq!(0, _part1_windows(&[].to_vec()));
+    assert_eq!(7, _part1_windows(&_EXAMPLE.to_vec()));
 }
 
 #[test]
 fn test_part2_windows_example() {
-    assert_eq!(0, part2_windows(&[].to_vec()));
-    assert_eq!(5, part2_windows(&_EXAMPLE.to_vec()));
+    assert_eq!(0, _part2_windows(&[].to_vec()));
+    assert_eq!(5, _part2_windows(&_EXAMPLE.to_vec()));
+}
+
+#[test]
+fn test_part1_math_example() {
+    assert_eq!(0, part1_math(&[].to_vec()));
+    assert_eq!(7, part1_math(&_EXAMPLE.to_vec()));
+}
+
+#[test]
+fn test_part2_math_example() {
+    assert_eq!(0, part2_math(&[].to_vec()));
+    assert_eq!(5, part2_math(&_EXAMPLE.to_vec()));
 }
