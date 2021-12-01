@@ -4,25 +4,28 @@ use std::io::{self, prelude::*};
 use std::time::Instant;
 
 /**
- * Nicer, but slower (4x)
+ * Nicer, but slower (3x)
  */
 fn _part1_slow_zip(measurements: &Vec<usize>) -> usize {
     measurements
         .iter()
         .skip(1)
         .zip(measurements.iter())
-        .fold(0, |acc, (m1, m2)| if m1 > m2 { acc + 1 } else { acc })
+        .filter(|(m1, m2)| m1 > m2)
+        .count()
 }
 
 fn part1(measurements: &Vec<usize>) -> usize {
     let mut p = measurements.first().unwrap_or(&0);
-    measurements.iter().skip(1).fold(0, |mut acc, m| {
-        if m > p {
-            acc += 1;
-        }
-        p = m;
-        acc
-    })
+    measurements
+        .iter()
+        .skip(1)
+        .filter(|m| {
+            let f = m > &p;
+            p = m;
+            f
+        })
+        .count()
 }
 
 fn part2(measurements: &Vec<usize>) -> usize {
