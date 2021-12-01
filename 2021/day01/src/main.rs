@@ -46,8 +46,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let measurements = io::BufReader::new(file)
         .lines()
-        .map(|l| l.unwrap().parse::<usize>().unwrap())
-        .collect();
+        .map(|l| Ok(l?.parse()?))
+        .collect::<Result<Vec<usize>, Box<dyn Error>>>()?;
 
     let s_part1 = Instant::now();
     println!(
