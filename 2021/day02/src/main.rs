@@ -1,3 +1,4 @@
+use std::error::Error;
 use std::fmt;
 use std::fs::File;
 use std::io::{self, BufRead};
@@ -8,6 +9,7 @@ use std::time::Instant;
 struct AoCError {
     kind: String,
     message: String,
+    source: Option<Box<dyn Error>>,
 }
 
 impl fmt::Display for AoCError {
@@ -21,6 +23,7 @@ impl From<io::Error> for AoCError {
         AoCError {
             kind: String::from("io"),
             message: error.to_string(),
+            source: Some(Box::new(error)),
         }
     }
 }
@@ -30,6 +33,7 @@ impl From<ParseIntError> for AoCError {
         AoCError {
             kind: String::from("parse"),
             message: error.to_string(),
+            source: Some(Box::new(error)),
         }
     }
 }
@@ -38,6 +42,7 @@ fn aoc_error(kind: &str, message: &str) -> AoCError {
     AoCError {
         kind: String::from(kind),
         message: String::from(message),
+        source: None,
     }
 }
 
@@ -72,7 +77,7 @@ fn parse_line(l: Result<String, io::Error>) -> Result<(Instruction, i64), AoCErr
     let line = l?;
     let (instr, vstr) = line
         .split_once(' ')
-        .ok_or(aoc_error("option", "spit_once failed"))?;
+        .ok_or(aoc_error("option", "split_once failed"))?;
     let instruction_char = instr
         .chars()
         .next()
