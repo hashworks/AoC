@@ -34,6 +34,13 @@ impl From<ParseIntError> for AoCError {
     }
 }
 
+fn aoc_error(kind: &str, message: &str) -> AoCError {
+    AoCError {
+        kind: String::from(kind),
+        message: String::from(message),
+    }
+}
+
 #[derive(Clone, Debug)]
 enum Instruction {
     Forward,
@@ -63,23 +70,22 @@ fn part2(instructions: &Vec<(Instruction, i64)>) -> i64 {
 
 fn parse_line(l: Result<String, io::Error>) -> Result<(Instruction, i64), AoCError> {
     let line = l?;
-    let (instr, vstr) = line.split_once(' ').ok_or(AoCError {
-        kind: "option".to_string(),
-        message: "split_once failed".to_string(),
-    })?;
-    let instruction_char = instr.chars().next().ok_or(AoCError {
-        kind: "option".to_string(),
-        message: "failed to read the first char".to_string(),
-    })?;
+    let (instr, vstr) = line
+        .split_once(' ')
+        .ok_or(aoc_error("option", "spit_once failed"))?;
+    let instruction_char = instr
+        .chars()
+        .next()
+        .ok_or(aoc_error("option", "failed to read the first char"))?;
     let instruction = match instruction_char {
         'u' => Instruction::Up,
         'd' => Instruction::Down,
         'f' => Instruction::Forward,
-        _ => {
-            return Err(AoCError {
-                kind: "parse".to_string(),
-                message: "invalid instruction".to_string(),
-            })
+        c => {
+            return Err(aoc_error(
+                "parse",
+                format!("invalid instruction '{}'", c).as_str(),
+            ))
         }
     };
     Ok((instruction, vstr.parse()?))
