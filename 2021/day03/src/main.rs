@@ -56,59 +56,59 @@ fn parse_line(l: Result<String, io::Error>) -> Result<Vec<bool>, AoCError> {
         .collect::<Result<Vec<bool>, AoCError>>()
 }
 
-fn calculate_common_bits(bits_vec: &Vec<Vec<bool>>, filter_index: Option<usize>) -> Vec<bool> {
-    bits_vec
+fn calculate_common_bits(bits_vec: &Vec<Vec<bool>>) -> Vec<bool> {
+    let bit_count = match bits_vec.get(0) {
+        Some(bits) => bits.len(),
+        None => 0,
+    };
+    let mut common_bits = vec![0usize; bit_count];
+    for bits in bits_vec {
+        for i in 0..bits.len() {
+            common_bits[i] += if bits[i] { 1 } else { 0 };
+        }
+    }
+    common_bits
         .iter()
-        .fold(vec![], |mut acc: Vec<(usize, usize)>, l| {
-            l.iter()
-                .enumerate()
-                .filter(|(i, _)| match filter_index {
-                    Some(f_i) => i == &f_i,
-                    None => true,
-                })
-                .for_each(|(i, bit)| {
-                    let i = match filter_index {
-                        Some(_) => 0,
-                        None => i,
-                    };
-                    let pair = match acc.get(i) {
-                        Some(pair) => pair,
-                        None => {
-                            acc.push((0, 0));
-                            &(0, 0)
-                        }
-                    };
-                    if *bit {
-                        acc[i] = (pair.0, pair.1 + 1)
-                    } else {
-                        acc[i] = (pair.0 + 1, pair.1)
-                    }
-                });
-            acc
+        .map(|&count| {
+            let rest = bits_vec.len() - count;
+            rest == count || rest < count
         })
-        .iter()
-        .map(|(zero_c, one_c)| zero_c == one_c || one_c > zero_c)
-        .collect()
+        .collect::<Vec<bool>>()
+}
+
+fn calculate_common_bits_of_index(bits_vec: &Vec<Vec<bool>>, index: usize) -> bool {
+    let count = bits_vec.iter().fold(0, |acc, bits| match bits.get(index) {
+        Some(bit) => {
+            if *bit {
+                acc + 1
+            } else {
+                acc
+            }
+        }
+        None => acc,
+    });
+    let rest = bits_vec.len() - count;
+    rest == count || rest < count
 }
 
 fn binary_to_decimal(bits: &Vec<bool>) -> Result<usize, AoCError> {
     bits.iter().rev().enumerate().fold(Ok(0), |dec, (i, bit)| {
-        Ok(if *bit {
-            dec? + 2_usize.pow(i.try_into()?)
+        if *bit {
+            Ok(dec? + 2_usize.pow(i.try_into()?))
         } else {
-            dec?
-        })
+            dec
+        }
     })
 }
 
-fn reverse_bits(bits: &Vec<bool>) -> Vec<bool> {
+fn invert_bits(bits: &Vec<bool>) -> Vec<bool> {
     bits.iter().map(|bit| !*bit).collect()
 }
 
 fn part1(bits_vec: &Vec<Vec<bool>>) -> Result<usize, AoCError> {
-    let common_bits = calculate_common_bits(bits_vec, None);
+    let common_bits = calculate_common_bits(bits_vec);
     let gamma = binary_to_decimal(&common_bits)?;
-    let epsilon = binary_to_decimal(&reverse_bits(&common_bits))?;
+    let epsilon = binary_to_decimal(&invert_bits(&common_bits))?;
     Ok(gamma * epsilon)
 }
 
@@ -118,19 +118,16 @@ fn part2_filter(mut bits_vec: Vec<Vec<bool>>, common: bool) -> Result<Vec<bool>,
         .ok_or(aoc_error("option", "empty bits_vec"))?
         .len()
     {
-        let common_bits = calculate_common_bits(&bits_vec, Some(i));
-        let common_bit = common_bits
-            .get(0)
-            .ok_or(aoc_error("option", "empty common bits vec"))?;
+        let common_bit = calculate_common_bits_of_index(&bits_vec, i);
         bits_vec = bits_vec
             .iter()
             .filter(|bits| {
                 let bit = bits.get(i);
                 bit.is_some()
                     && if common {
-                        bit.unwrap() == common_bit
+                        *bit.unwrap() == common_bit
                     } else {
-                        bit.unwrap() != common_bit
+                        *bit.unwrap() != common_bit
                     }
             })
             .map(|bits| bits.to_vec())
@@ -200,17 +197,20 @@ const _EXAMPLE: &str = "00100
 
 #[test]
 fn test_calculate_common_bits_example() {
+    let v = &_EXAMPLE
+        .to_string()
+        .lines()
+        .map(|l| parse_line(Ok(l.to_string())).unwrap())
+        .collect::<Vec<Vec<bool>>>();
     assert_eq!(
         vec![true, false, true, true, false],
-        calculate_common_bits(
-            &_EXAMPLE
-                .to_string()
-                .lines()
-                .map(|l| parse_line(Ok(l.to_string())).unwrap())
-                .collect(),
-            None
-        )
+        calculate_common_bits(v)
     );
+    assert_eq!(true, calculate_common_bits_of_index(v, 0));
+    assert_eq!(false, calculate_common_bits_of_index(v, 1));
+    assert_eq!(true, calculate_common_bits_of_index(v, 2));
+    assert_eq!(true, calculate_common_bits_of_index(v, 3));
+    assert_eq!(false, calculate_common_bits_of_index(v, 4));
 }
 
 #[test]
@@ -224,7 +224,6 @@ fn test_binary_to_decimal() {
 
 #[test]
 fn test_part1() {
-    assert_eq!(0, part1(&vec![]).unwrap());
     assert_eq!(
         198,
         part1(
@@ -240,9 +239,8 @@ fn test_part1() {
 
 #[test]
 fn test_part2() {
-    assert_eq!(0, part1(&vec![]).unwrap());
     assert_eq!(
-        198,
+        230,
         part2(
             &_EXAMPLE
                 .to_string()
