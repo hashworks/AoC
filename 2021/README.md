@@ -4,10 +4,10 @@ https://adventofcode.com/2021/
 
 Solutions will be done in Rust. Total includes disk read and parse times.
 
-## Runtimes (i5-6600K)
+## Runtimes (Ryzen 5800X)
 
-|  Day |  Part 1 | Part 2 | Total | perf stat -r 1000 |
-| ---: | ------: | -----: | ----: | ----------------: |
-|    1 |   500ns |  500ns |  92µs |             549µs |
-|    2 |  3720ns | 3780ns | 109µs |             561µs |
-
+|  Day |  Part 1 | Part 2  | Total   | perf stat -r 1000 |
+| ---: | ------: | ------: | ------: | ----------------: |
+|    1 |   0.5µs |   0.5µs |  92.0µs |           549.0µs |
+|    2 |   3.7µs |   3.7µs | 109.0µs |           561.0µs |
+|    3 |  48.0µs | 171.0µs | 409.0µs |           899.0µs |
