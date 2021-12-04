@@ -17,18 +17,21 @@ enum AoCError {
 
 #[derive(Debug, Clone, Copy)]
 struct Card {
-    winning_number: usize,
+    winning_number: Option<usize>,
     rows: [[(usize, bool); 5]; 5],
 }
 
 impl Card {
     fn new() -> Self {
         Card {
-            winning_number: 0,
+            winning_number: None,
             rows: [[(0, false); 5]; 5],
         }
     }
     fn mark_and_check(&mut self, number: usize) -> bool {
+        if self.winning_number.is_some() {
+            return false;
+        }
         let marked_cell = self.rows.iter().enumerate().find_map(|(r_nr, row)| {
             row.iter().enumerate().find_map(|(c_nr, &(n, _))| {
                 if n == number {
@@ -41,7 +44,7 @@ impl Card {
         if let Some((r_nr, c_nr)) = marked_cell {
             self.rows[r_nr][c_nr].1 = true;
             if self.rows[r_nr].iter().all(|(_, m)| *m) || self.rows.iter().all(|row| row[c_nr].1) {
-                self.winning_number = number;
+                self.winning_number = Some(number);
                 return true;
             }
         }
@@ -57,7 +60,7 @@ impl Card {
                     .sum::<usize>()
             })
             .sum::<usize>()
-            * self.winning_number
+            * self.winning_number.unwrap_or(0)
     }
 }
 
@@ -110,23 +113,15 @@ fn part1(numbers: &Vec<usize>, mut cards: Vec<Card>) -> Result<usize, AoCError> 
 }
 
 fn part2(numbers: &Vec<usize>, mut cards: Vec<Card>) -> Result<usize, AoCError> {
-    let mut winning_cards = Vec::with_capacity(cards.len() - 1);
-
+    let mut last_winner = 0;
     for number in numbers {
         for i in 0..cards.len() {
-            if winning_cards.contains(&i) {
-                continue;
-            }
             if cards[i].mark_and_check(*number) {
-                if winning_cards.len() == cards.len() - 1 {
-                    return Ok(cards[i].score());
-                } else {
-                    winning_cards.push(i);
-                }
+                last_winner = i;
             }
         }
     }
-    Err(AoCError::NoWinnerErr)
+    Ok(cards[last_winner].score())
 }
 
 fn main() -> Result<(), AoCError> {
