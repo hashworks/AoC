@@ -32,7 +32,7 @@ fn part1(numbers: &mut Vec<i32>) -> i32 {
 }
 
 fn part2(numbers: &Vec<i32>) -> Option<i32> {
-    let average = (numbers.iter().sum::<i32>() as f64 / numbers.len() as f64).round() as i32;
+    let average = numbers.iter().sum::<i32>() / numbers.len() as i32;
 
     let window = [average - 2, average - 1, average, average + 1, average + 2];
 
