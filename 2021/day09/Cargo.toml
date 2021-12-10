@@ -1,0 +1,8 @@
+[package]
+name = "aoc-2021-day09"
+version = "0.1.0"
+authors = ["hashworks <mail@hashworks.net>"]
+edition = "2021"
+
+[dependencies]
+thiserror = "1.0"
