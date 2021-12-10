@@ -1,0 +1,17 @@
+
+ Performance counter stats for './target/release/aoc-2021-day08' (1000 runs):
+
+              0.58 msec task-clock:u              #    1.041 CPUs utilized            ( +-  0.17% )
+                 0      context-switches:u        #    0.000 /sec                   
+                 0      cpu-migrations:u          #    0.000 /sec                   
+               109      page-faults:u             #  256.923 K/sec                    ( +-  0.05% )
+           941,179      cycles:u                  #    2.218 GHz                      ( +-  0.08% )
+             6,469      stalled-cycles-frontend:u #    0.68% frontend cycles idle     ( +-  0.61% )
+               257      stalled-cycles-backend:u  #    0.03% backend cycles idle      ( +-144.53% )
+         1,838,558      instructions:u            #    1.94  insn per cycle         
+                                                  #    0.01  stalled cycles per insn  ( +-  0.00% )
+           377,604      branches:u                #  890.048 M/sec                    ( +-  0.00% )
+            15,808      branch-misses:u           #    4.19% of all branches          ( +-  0.02% )
+
+        0.00055544 +- 0.00000168 seconds time elapsed  ( +-  0.30% )
+
