@@ -83,20 +83,20 @@ fn parts(cave_system: &CaveSystem, allow_joker: bool) -> Result<usize, AoCError>
                     count += 1;
                     continue;
                 }
-                _ => {
-                    let joker = match neighbor {
-                        Cave::Small(_) => {
-                            if path.contains(&neighbor) {
-                                if allow_joker && !joker {
-                                    &true
-                                } else {
-                                    continue;
-                                }
-                            } else {
-                                &joker
-                            }
+                Cave::Big(_) => {
+                    let mut new_path = path.clone();
+                    new_path.push(neighbor);
+                    paths.push((&joker, new_path));
+                }
+                Cave::Small(_) => {
+                    let joker = if path.contains(&neighbor) {
+                        if allow_joker && !joker {
+                            &true
+                        } else {
+                            continue;
                         }
-                        _ => joker,
+                    } else {
+                        joker
                     };
                     let mut new_path = path.clone();
                     new_path.push(neighbor);
