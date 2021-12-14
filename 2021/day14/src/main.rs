@@ -1,4 +1,5 @@
 use core::hash::Hash;
+use std::cmp::{max, min};
 use std::collections::HashMap;
 use std::fmt::Debug;
 use std::fs::File;
@@ -69,17 +70,12 @@ fn count_polymers<T: Eq + Hash + Copy>(pairs: Pairs<T>, rules: &Rules<T>, steps:
         *polymers.entry(a).or_insert(0) += count;
         *polymers.entry(b).or_insert(0) += count;
     }
-    let mut min = std::usize::MAX;
-    let mut max = 0;
-    for (_, value) in polymers {
-        if value < min {
-            min = value;
-        }
-        if value > max {
-            max = value;
-        }
-    }
-    (max + (max % 2) - min + (min % 2)) / 2
+    let (min_p, max_p) = polymers
+        .values()
+        .fold((std::usize::MAX, 0), |(min_p, max_p), &count| {
+            (min(min_p, count), max(max_p, count))
+        });
+    (max_p + (max_p % 2) - min_p + (min_p % 2)) / 2
 }
 
 fn main() -> Result<(), AoCError> {
