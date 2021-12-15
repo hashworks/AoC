@@ -1,17 +1,17 @@
 
  Performance counter stats for './target/release/aoc-2021-day12' (1000 runs):
 
-             38.13 msec task-clock:u              #    0.987 CPUs utilized            ( +-  0.11% )
+             35.59 msec task-clock:u              #    0.985 CPUs utilized            ( +-  0.13% )
                  0      context-switches:u        #    0.000 /sec                   
                  0      cpu-migrations:u          #    0.000 /sec                   
-               101      page-faults:u             #    2.632 K/sec                    ( +-  0.05% )
-       169,184,920      cycles:u                  #    4.409 GHz                      ( +-  0.11% )
-           882,754      stalled-cycles-frontend:u #    0.52% frontend cycles idle     ( +-  0.55% )
-            47,184      stalled-cycles-backend:u  #    0.03% backend cycles idle      ( +-  2.39% )
-       499,293,994      instructions:u            #    2.92  insn per cycle         
-                                                  #    0.00  stalled cycles per insn  ( +-  0.04% )
-       112,417,454      branches:u                #    2.929 G/sec                    ( +-  0.05% )
-         1,202,597      branch-misses:u           #    1.07% of all branches          ( +-  0.36% )
+                87      page-faults:u             #    2.428 K/sec                    ( +-  0.05% )
+       163,027,502      cycles:u                  #    4.550 GHz                      ( +-  0.12% )
+           553,805      stalled-cycles-frontend:u #    0.34% frontend cycles idle     ( +-  0.71% )
+            38,502      stalled-cycles-backend:u  #    0.02% backend cycles idle      ( +-  2.85% )
+       474,443,644      instructions:u            #    2.94  insn per cycle         
+                                                  #    0.00  stalled cycles per insn  ( +-  0.05% )
+       103,438,307      branches:u                #    2.887 G/sec                    ( +-  0.06% )
+         1,234,732      branch-misses:u           #    1.20% of all branches          ( +-  0.35% )
 
-         0.0386241 +- 0.0000419 seconds time elapsed  ( +-  0.11% )
+         0.0361377 +- 0.0000473 seconds time elapsed  ( +-  0.13% )
 

@@ -4,6 +4,10 @@ version = "0.1.0"
 authors = ["hashworks <mail@hashworks.net>"]
 edition = "2021"
 
+[profile.release]
+codegen-units = 1
+lto = "yes"
+
 [dependencies]
 thiserror = "1.0"
 pathfinding = "3.0.5"

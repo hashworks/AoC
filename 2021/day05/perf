@@ -1,17 +1,17 @@
 
  Performance counter stats for './target/release/aoc-2021-day05' (1000 runs):
 
-              2.80 msec task-clock:u              #    1.034 CPUs utilized            ( +-  0.15% )
+              2.30 msec task-clock:u              #    0.938 CPUs utilized            ( +-  0.17% )
                  0      context-switches:u        #    0.000 /sec                   
                  0      cpu-migrations:u          #    0.000 /sec                   
-               894      page-faults:u             #  350.106 K/sec                    ( +-  0.01% )
-         8,747,826      cycles:u                  #    3.426 GHz                      ( +-  0.13% )
-            10,339      stalled-cycles-frontend:u #    0.13% frontend cycles idle     ( +-  1.06% )
-           322,351      stalled-cycles-backend:u  #    3.90% backend cycles idle      ( +-  1.42% )
-        23,349,489      instructions:u            #    2.83  insn per cycle         
+               881      page-faults:u             #  379.330 K/sec                    ( +-  0.01% )
+         7,933,088      cycles:u                  #    3.416 GHz                      ( +-  0.10% )
+            11,952      stalled-cycles-frontend:u #    0.15% frontend cycles idle     ( +-  1.36% )
+             2,220      stalled-cycles-backend:u  #    0.03% backend cycles idle      ( +-208.01% )
+        22,643,968      instructions:u            #    2.83  insn per cycle         
                                                   #    0.01  stalled cycles per insn  ( +-  0.00% )
-         3,242,162      branches:u                #    1.270 G/sec                    ( +-  0.00% )
-            41,600      branch-misses:u           #    1.28% of all branches          ( +-  0.02% )
+         2,984,811      branches:u                #    1.285 G/sec                    ( +-  0.00% )
+            40,832      branch-misses:u           #    1.37% of all branches          ( +-  0.02% )
 
-        0.00270573 +- 0.00000442 seconds time elapsed  ( +-  0.16% )
+        0.00245646 +- 0.00000462 seconds time elapsed  ( +-  0.19% )
 
