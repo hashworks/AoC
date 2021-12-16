@@ -1,3 +1,4 @@
+template
 target
 Cargo.lock
 *.rs.bk
