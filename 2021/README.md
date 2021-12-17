@@ -24,3 +24,4 @@ Solutions will be done in Rust. Total includes disk read and parse times.
 |   14 |   58.00µs |   252.00µs |   339.00µs |          719.00µs |
 |   15 |  814.00µs | 29749.00µs | 30625.00µs |        36401.00µs |
 |   16 |         - |    32.00µs |    51.00µs |          458.00µs |
+|   17 |    0.02µs |   204.00µs |   217.00µs |          566.00µs |
