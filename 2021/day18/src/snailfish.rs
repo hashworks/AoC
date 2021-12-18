@@ -61,7 +61,10 @@ impl SFR {
     pub fn reduce(self) -> SFR {
         let mut sfr = self;
         loop {
-            let (new_sfr, changed) = sfr.reduce_once(0);
+            let (new_sfr, changed) = {
+                let (sfr, _, _) = sfr.reduce_explode(0);
+                sfr.reduce_split()
+            };
             sfr = new_sfr;
             if !changed {
                 break;
@@ -70,65 +73,39 @@ impl SFR {
         sfr
     }
 
-    fn reduce_once(self, level: usize) -> (SFR, bool) {
-        let (sfr, _, _, changed) = self.reduce_explode(level);
-        if changed {
-            (sfr, true)
-        } else {
-            sfr.reduce_split()
-        }
-    }
-
-    fn reduce_explode(self, level: usize) -> (SFR, Option<usize>, Option<usize>, bool) {
+    fn reduce_explode(self, level: usize) -> (SFR, usize, usize) {
         match self {
-            SFR::R(_) => (self, None, None, false),
+            SFR::R(_) => (self, 0, 0),
             SFR::SF(sf) => {
                 match (sf.0, sf.1) {
                     (SFR::R(left_regular), SFR::R(right_regular)) if level == 4 => {
-                        (SFR::R(0), Some(left_regular), Some(right_regular), true)
+                        (SFR::R(0), left_regular, right_regular)
                     }
                     (left, right) => {
                         // No explode, reduce_explode and apply carryover on explosion
-                        let (left, left_carryover, right_carryover, exploded) =
+                        let (left, left_left_carryover, left_right_carryover) =
                             left.reduce_explode(level + 1);
-                        if exploded {
-                            let right = if let Some(right_carryover) = right_carryover {
-                                right.add_right_carryover(Some(right_carryover))
-                            } else {
-                                right
-                            };
+                        let right = right.add_right_carryover(left_right_carryover);
 
-                            return (SFR::SF(Box::new((left, right))), left_carryover, None, true);
-                        }
-
-                        let (right, left_carryover, right_carryover, exploded) =
+                        let (right, right_left_carryover, right_right_carryover) =
                             right.reduce_explode(level + 1);
-                        if exploded {
-                            let left = if let Some(left_carryover) = left_carryover {
-                                left.add_left_carryover(Some(left_carryover))
-                            } else {
-                                left
-                            };
+                        let left = left.add_left_carryover(right_left_carryover);
 
-                            return (
-                                SFR::SF(Box::new((left, right))),
-                                None,
-                                right_carryover,
-                                true,
-                            );
-                        }
-
-                        (SFR::SF(Box::new((left, right))), None, None, false)
+                        (
+                            SFR::SF(Box::new((left, right))),
+                            left_left_carryover,
+                            right_right_carryover,
+                        )
                     }
                 }
             }
         }
     }
 
-    fn add_left_carryover(self, carryover: Option<usize>) -> SFR {
-        if let Some(carryover) = carryover {
+    fn add_left_carryover(self, carryover: usize) -> SFR {
+        if carryover != 0 {
             match self {
-                SFR::SF(sf) => SFR::SF(Box::new((sf.0, sf.1.add_left_carryover(Some(carryover))))),
+                SFR::SF(sf) => SFR::SF(Box::new((sf.0, sf.1.add_left_carryover(carryover)))),
                 SFR::R(regular) => SFR::R(carryover + regular),
             }
         } else {
@@ -136,10 +113,10 @@ impl SFR {
         }
     }
 
-    fn add_right_carryover(self, carryover: Option<usize>) -> SFR {
-        if let Some(carryover) = carryover {
+    fn add_right_carryover(self, carryover: usize) -> SFR {
+        if carryover != 0 {
             match self {
-                SFR::SF(sf) => SFR::SF(Box::new((sf.0.add_right_carryover(Some(carryover)), sf.1))),
+                SFR::SF(sf) => SFR::SF(Box::new((sf.0.add_right_carryover(carryover), sf.1))),
                 SFR::R(regular) => SFR::R(carryover + regular),
             }
         } else {
