@@ -28,3 +28,4 @@ Solutions will be done in Rust. Total includes disk read and parse times.
 |   18 | 3519.00µs | 61843.00µs | 65414.00µs |        66854.00µs |
 |   19 |      TODO |       TODO |       TODO |              TODO |
 |   20 |   98.00µs |  7303.00µs |  7441.00µs |         7766.00µs |
+|   21 |    0.53µs | 10093.00µs | 10107.00µs |        10734.00µs |
