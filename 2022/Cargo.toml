@@ -1,0 +1,14 @@
+[package]
+name = "aoc-2022"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "template"
+path = "src/template.rs"
+
+[[bin]]
+name = "day01"
+path = "src/day01.rs"
+
+[dependencies]
