@@ -37,7 +37,7 @@ impl AoCDay<Input, Output> for Day {
     }
 
     fn part2(&self, input: &Input) -> Output {
-        let mut vec: Vec<usize> = input.iter().map(|v| v.iter().sum()).collect();
+        let mut vec: Vec<_> = input.iter().map(|v| v.iter().sum()).collect();
         vec.sort();
 
         vec.iter().rev().take(3).sum()
