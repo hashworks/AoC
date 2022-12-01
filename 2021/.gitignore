@@ -1,4 +1,3 @@
-template
+input*
 target
-Cargo.lock
-*.rs.bk
+/template
