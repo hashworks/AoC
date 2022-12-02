@@ -43,7 +43,7 @@ mod tests {
     fn test_solve_part2() {
         let day = Day {};
         assert_eq!(
-            day.parse_and_solve_part1(format!("{}_test1", ID).as_str())
+            day.parse_and_solve_part2(format!("{}_test1", ID).as_str())
                 .unwrap(),
             42
         );
