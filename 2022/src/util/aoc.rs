@@ -15,7 +15,7 @@ pub(crate) trait AoCDay<I, O: std::fmt::Display> {
         let before_part1 = Instant::now();
         let part1 = self.part1(&input);
         println!(
-            "day{} part1 (took {:?}): {}",
+            "{} part1 (took {:?}): {}",
             id,
             before_part1.elapsed(),
             part1,
@@ -24,7 +24,7 @@ pub(crate) trait AoCDay<I, O: std::fmt::Display> {
         let pefore_part2 = Instant::now();
         let part2 = self.part2(&input);
         println!(
-            "day{} part2 (took {:?}): {}",
+            "{} part2 (took {:?}): {}",
             id,
             pefore_part2.elapsed(),
             part2,
