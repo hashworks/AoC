@@ -4,69 +4,20 @@ use std::{error::Error, io::BufRead};
 use util::{aoc::AoCDay, input::get_reader};
 
 const ID: &str = "day02";
-type Input = Vec<Round>;
+type Input = Vec<(char, char)>;
 type Output = usize;
 
-struct Round {
-    opponent: Item,
-    outcome: Outcome,
-}
+const OPPONENT_ROCK: char = 'A';
+const OPPONENT_PAPER: char = 'B';
+const OPPONENT_SCISSORS: char = 'C';
 
-impl TryInto<Round> for String {
-    type Error = Box<dyn Error>;
+const PART1_ROCK: char = 'X';
+const PART1_PAPER: char = 'Y';
+const PART1_SCISSORS: char = 'Z';
 
-    fn try_into(self) -> Result<Round, Self::Error> {
-        let mut chars = self.chars();
-        let opponent = chars.next();
-        chars.next();
-        let outcome = chars.next();
-        if opponent.is_none() || outcome.is_none() {
-            return Err("Invalid input".into());
-        }
-        Ok(Round {
-            opponent: opponent.unwrap().try_into()?,
-            outcome: outcome.unwrap().try_into()?,
-        })
-    }
-}
-
-enum Item {
-    Rock,
-    Paper,
-    Scissors,
-}
-
-impl TryInto<Item> for char {
-    type Error = String;
-
-    fn try_into(self) -> Result<Item, Self::Error> {
-        match self {
-            'A' => Ok(Item::Rock),
-            'B' => Ok(Item::Paper),
-            'C' => Ok(Item::Scissors),
-            _ => Err(format!("Invalid item: {}", self).into()),
-        }
-    }
-}
-
-enum Outcome {
-    Win,
-    Loose,
-    Draw,
-}
-
-impl TryInto<Outcome> for char {
-    type Error = String;
-
-    fn try_into(self) -> Result<Outcome, Self::Error> {
-        match self {
-            'X' => Ok(Outcome::Loose),
-            'Y' => Ok(Outcome::Draw),
-            'Z' => Ok(Outcome::Win),
-            _ => Err(format!("Invalid outcome: {}", self).into()),
-        }
-    }
-}
+const PART2_LOOSE: char = 'X';
+const PART2_DRAW: char = 'Y';
+const PART2_WIN: char = 'Z';
 
 struct Day {}
 
@@ -74,31 +25,34 @@ impl AoCDay<Input, Output> for Day {
     fn parse_input(&self, id: &str) -> Result<Input, Box<dyn Error>> {
         get_reader(id)?
             .lines()
-            .map(|l| l?.try_into())
-            .into_iter()
-            .collect::<Result<_, _>>()
+            .map(|l| {
+                let line = l?;
+                let mut chars = line.chars();
+                let left = chars.next();
+                chars.next();
+                let right = chars.next();
+                if left.is_none() || right.is_none() {
+                    return Err("Invalid input".into());
+                }
+                Ok((left.unwrap(), right.unwrap()))
+            })
+            .collect()
     }
 
     fn part1(&self, input: &Input) -> Output {
         input
             .iter()
-            .map(|r| {
-                let player = match r.outcome {
-                    Outcome::Loose => Item::Rock,
-                    Outcome::Draw => Item::Paper,
-                    Outcome::Win => Item::Scissors,
-                };
-                match (player, &r.opponent) {
-                    (Item::Rock, Item::Scissors) => 1 + 6,
-                    (Item::Paper, Item::Rock) => 2 + 6,
-                    (Item::Scissors, Item::Paper) => 3 + 6,
-                    (Item::Rock, Item::Rock) => 1 + 3,
-                    (Item::Paper, Item::Paper) => 2 + 3,
-                    (Item::Scissors, Item::Scissors) => 3 + 3,
-                    (Item::Rock, Item::Paper) => 1 + 0,
-                    (Item::Paper, Item::Scissors) => 2 + 0,
-                    (Item::Scissors, Item::Rock) => 3 + 0,
-                }
+            .map(|(left, right)| match (*right, *left) {
+                (PART1_ROCK, OPPONENT_SCISSORS) => 1 + 6,
+                (PART1_PAPER, OPPONENT_ROCK) => 2 + 6,
+                (PART1_SCISSORS, OPPONENT_PAPER) => 3 + 6,
+                (PART1_ROCK, OPPONENT_ROCK) => 1 + 3,
+                (PART1_PAPER, OPPONENT_PAPER) => 2 + 3,
+                (PART1_SCISSORS, OPPONENT_SCISSORS) => 3 + 3,
+                (PART1_ROCK, OPPONENT_PAPER) => 1 + 0,
+                (PART1_PAPER, OPPONENT_SCISSORS) => 2 + 0,
+                (PART1_SCISSORS, OPPONENT_ROCK) => 3 + 0,
+                _ => 0,
             })
             .sum()
     }
@@ -106,16 +60,17 @@ impl AoCDay<Input, Output> for Day {
     fn part2(&self, input: &Input) -> Output {
         input
             .iter()
-            .map(|r| match (&r.outcome, &r.opponent) {
-                (Outcome::Win, Item::Scissors) => 1 + 6,
-                (Outcome::Win, Item::Rock) => 2 + 6,
-                (Outcome::Win, Item::Paper) => 3 + 6,
-                (Outcome::Draw, Item::Rock) => 1 + 3,
-                (Outcome::Draw, Item::Paper) => 2 + 3,
-                (Outcome::Draw, Item::Scissors) => 3 + 3,
-                (Outcome::Loose, Item::Paper) => 1 + 0,
-                (Outcome::Loose, Item::Scissors) => 2 + 0,
-                (Outcome::Loose, Item::Rock) => 3 + 0,
+            .map(|(left, right)| match (*right, *left) {
+                (PART2_WIN, OPPONENT_SCISSORS) => 1 + 6,
+                (PART2_WIN, OPPONENT_ROCK) => 2 + 6,
+                (PART2_WIN, OPPONENT_PAPER) => 3 + 6,
+                (PART2_DRAW, OPPONENT_ROCK) => 1 + 3,
+                (PART2_DRAW, OPPONENT_PAPER) => 2 + 3,
+                (PART2_DRAW, OPPONENT_SCISSORS) => 3 + 3,
+                (PART2_LOOSE, OPPONENT_PAPER) => 1 + 0,
+                (PART2_LOOSE, OPPONENT_SCISSORS) => 2 + 0,
+                (PART2_LOOSE, OPPONENT_ROCK) => 3 + 0,
+                _ => 0,
             })
             .sum()
     }
