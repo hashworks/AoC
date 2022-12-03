@@ -25,7 +25,7 @@ impl AoCDay<Input, Output> for Day {
                 temp.push(line.parse()?);
             }
         }
-        if temp.len() > 0 {
+        if !temp.is_empty() {
             result.push(temp);
         }
 

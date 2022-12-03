@@ -49,9 +49,9 @@ impl AoCDay<Input, Output> for Day {
                 (PART1_ROCK, OPPONENT_ROCK) => 1 + 3,
                 (PART1_PAPER, OPPONENT_PAPER) => 2 + 3,
                 (PART1_SCISSORS, OPPONENT_SCISSORS) => 3 + 3,
-                (PART1_ROCK, OPPONENT_PAPER) => 1 + 0,
-                (PART1_PAPER, OPPONENT_SCISSORS) => 2 + 0,
-                (PART1_SCISSORS, OPPONENT_ROCK) => 3 + 0,
+                (PART1_ROCK, OPPONENT_PAPER) => 1,
+                (PART1_PAPER, OPPONENT_SCISSORS) => 2,
+                (PART1_SCISSORS, OPPONENT_ROCK) => 3,
                 _ => 0,
             })
             .sum()
@@ -67,9 +67,9 @@ impl AoCDay<Input, Output> for Day {
                 (PART2_DRAW, OPPONENT_ROCK) => 1 + 3,
                 (PART2_DRAW, OPPONENT_PAPER) => 2 + 3,
                 (PART2_DRAW, OPPONENT_SCISSORS) => 3 + 3,
-                (PART2_LOOSE, OPPONENT_PAPER) => 1 + 0,
-                (PART2_LOOSE, OPPONENT_SCISSORS) => 2 + 0,
-                (PART2_LOOSE, OPPONENT_ROCK) => 3 + 0,
+                (PART2_LOOSE, OPPONENT_PAPER) => 1,
+                (PART2_LOOSE, OPPONENT_SCISSORS) => 2,
+                (PART2_LOOSE, OPPONENT_ROCK) => 3,
                 _ => 0,
             })
             .sum()
