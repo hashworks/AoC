@@ -16,6 +16,10 @@ cargo run --release --bin day01
 cargo test --bin day01
 ```
 
+## ENV Variables
+
+`INPUT` can be set to provide a path to a specific file as input. Otherwise, `inputs/day{ID}.txt` will be used.
+
 ## Results
 
 |  Day  |  Parsing  |  Part 1  |  Part 2  |
