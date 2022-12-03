@@ -9,5 +9,5 @@ pub(crate) fn get_reader(id: &str) -> IoResult<BufReader<File>> {
         Ok(val) => val,
         Err(_) => format!("inputs/{}.txt", id),
     };
-    Ok(BufReader::new(File::open(path.clone())?))
+    Ok(BufReader::new(File::open(path)?))
 }
