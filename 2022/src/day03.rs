@@ -1,6 +1,6 @@
 mod util;
 
-use std::{collections::HashSet, error::Error, io::BufRead};
+use std::{error::Error, io::BufRead};
 use util::{aoc::AoCDay, input::get_reader};
 
 const ID: &str = "day03";
@@ -25,10 +25,10 @@ impl AoCDay<Input, Output> for Day {
             .iter()
             .map(|items| {
                 let (lh, rh) = items.split_at(items.len() / 2);
-                let lh: HashSet<_> = lh.iter().copied().collect();
-                let rh: HashSet<_> = rh.iter().copied().collect();
-                let item = lh.intersection(&rh).next().unwrap_or(&b'a');
-                item_priority(item)
+                lh.iter()
+                    .find(|item| rh.contains(item))
+                    .map(item_priority)
+                    .unwrap_or(0)
             })
             .sum()
     }
@@ -37,13 +37,11 @@ impl AoCDay<Input, Output> for Day {
         input
             .chunks_exact(3)
             .map(|items| {
-                let first: HashSet<_> = items[0].iter().copied().collect();
-                let second: HashSet<_> = items[1].iter().copied().collect();
-                let third: HashSet<_> = items[2].iter().copied().collect();
-
-                let intersections = &(&first & &second) & &third;
-                let badge = intersections.iter().next().unwrap_or(&b'a');
-                item_priority(badge)
+                items[0]
+                    .iter()
+                    .find(|item| items[1].contains(item) && items[2].contains(item))
+                    .map(item_priority)
+                    .unwrap_or(0)
             })
             .sum()
     }
