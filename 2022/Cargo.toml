@@ -3,6 +3,8 @@ name = "aoc-2022"
 version = "0.1.0"
 edition = "2021"
 
+[dependencies]
+
 [[bin]]
 name = "template"
 path = "src/template.rs"
@@ -22,5 +24,3 @@ path = "src/day03.rs"
 [[bin]]
 name = "day04"
 path = "src/day04.rs"
-
-[dependencies]
