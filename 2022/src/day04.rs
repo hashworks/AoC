@@ -26,23 +26,15 @@ impl AoCDay<Input, Output> for Day {
 
     fn part1(&self, input: &Input) -> Output {
         input
-            .iter()
-            .filter(|(a, b, c, d)| {
-                c >= a && c <= b && d >= a && d <= b || // (c,d) is inside (a,b)
-                a >= c && a <= d && b >= c && b <= d // (a,b) is inside (c,d)
-            })
+            .iter() // The derefence is important here https://github.com/rust-lang/rust/issues/105259
+            .filter(|&&(a, b, c, d)| a <= c && d <= b || c <= a && b <= d)
             .count()
     }
 
     fn part2(&self, input: &Input) -> Output {
         input
             .iter()
-            .filter(|(a, b, c, d)| {
-                c >= a && c <= b || // c is inside (a,b)
-                d >= a && d <= b || // d is inside (a,b)
-                a >= c && a <= d || // a is inside (c,d)
-                b >= c && b <= d // b is inside (c,d)
-            })
+            .filter(|&&(a, b, c, d)| b >= c && d >= a)
             .count()
     }
 }
