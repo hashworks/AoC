@@ -11,7 +11,7 @@ else
     exit 1
 fi
 
-DATE="${1:-$(date +%d)}"
+DATE="${1:-$(date +%d | sed 's/^0*//')}"
 PADDED_DATE="$(printf "%02d" "${DATE}")"
 
 if [ -f "src/day${PADDED_DATE}.rs" ]; then
