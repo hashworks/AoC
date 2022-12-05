@@ -24,18 +24,18 @@ impl AoCDay<Input, Output> for Day {
             .collect::<Result<_, Box<dyn Error>>>()
     }
 
-    fn part1(&self, input: &Input) -> Output {
-        input
+    fn part1(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
+        Ok(input
             .iter() // The derefence is important here https://github.com/rust-lang/rust/issues/105259
             .filter(|&&(a, b, c, d)| a <= c && d <= b || c <= a && b <= d)
-            .count()
+            .count())
     }
 
-    fn part2(&self, input: &Input) -> Output {
-        input
+    fn part2(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
+        Ok(input
             .iter()
             .filter(|&&(a, b, c, d)| b >= c && d >= a)
-            .count()
+            .count())
     }
 }
 

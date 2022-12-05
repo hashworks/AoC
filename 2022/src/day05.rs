@@ -84,29 +84,25 @@ impl AoCDay<Input, Output> for Day {
         Ok((stacks, moves))
     }
 
-    fn part1(&self, (stacks, moves): &Input) -> Output {
+    fn part1(&self, (stacks, moves): &Input) -> Result<Output, Box<dyn Error>> {
         let mut stacks = stacks.clone();
         for (count, from, to) in moves {
             for _ in 0..*count {
-                let element = stacks[*from]
-                    .pop()
-                    .expect("Bad input! TODO better error handling");
+                let element = stacks[*from].pop().ok_or("Bad input")?;
                 stacks[*to].push(element);
             }
         }
 
-        top_to_string(&stacks)
+        Ok(top_to_string(&stacks))
     }
 
-    fn part2(&self, (stacks, moves): &Input) -> Output {
+    fn part2(&self, (stacks, moves): &Input) -> Result<Output, Box<dyn Error>> {
         let mut stacks = stacks.clone();
         for (count, from, to) in moves {
             let count = *count;
             let mut picked_crates = Vec::with_capacity(count);
             for _ in 0..count {
-                let element = stacks[*from]
-                    .pop()
-                    .expect("Bad input! TODO better error handling");
+                let element = stacks[*from].pop().ok_or("Bad input")?;
                 picked_crates.push(element);
             }
             for picked_crate in picked_crates.iter().rev() {
@@ -114,7 +110,7 @@ impl AoCDay<Input, Output> for Day {
             }
         }
 
-        top_to_string(&stacks)
+        Ok(top_to_string(&stacks))
     }
 }
 

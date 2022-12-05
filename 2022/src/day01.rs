@@ -32,15 +32,19 @@ impl AoCDay<Input, Output> for Day {
         Ok(result)
     }
 
-    fn part1(&self, input: &Input) -> Output {
-        input.iter().map(|v| v.iter().sum()).max().unwrap_or(0)
+    fn part1(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
+        input
+            .iter()
+            .map(|v| v.iter().sum())
+            .max()
+            .ok_or("no max".into())
     }
 
-    fn part2(&self, input: &Input) -> Output {
+    fn part2(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
         let mut vec: Vec<_> = input.iter().map(|v| v.iter().sum()).collect();
         vec.sort();
 
-        vec.iter().rev().take(3).sum()
+        Ok(vec.iter().rev().take(3).sum())
     }
 }
 
@@ -62,7 +66,7 @@ mod tests {
     fn test_solve_part2() {
         assert_eq!(
             Day {}
-                .parse_and_solve_part1(format!("{}_test1", ID).as_str())
+                .parse_and_solve_part2(format!("{}_test1", ID).as_str())
                 .unwrap(),
             45000
         );

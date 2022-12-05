@@ -20,7 +20,7 @@ impl AoCDay<Input, Output> for Day {
         Ok(items)
     }
 
-    fn part1(&self, input: &Input) -> Output {
+    fn part1(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
         input
             .iter()
             .map(|items| {
@@ -28,12 +28,12 @@ impl AoCDay<Input, Output> for Day {
                 lh.iter()
                     .find(|item| rh.contains(item))
                     .map(item_priority)
-                    .unwrap_or(0)
+                    .ok_or("no item found".into())
             })
             .sum()
     }
 
-    fn part2(&self, input: &Input) -> Output {
+    fn part2(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
         input
             .chunks_exact(3)
             .map(|items| {
@@ -41,7 +41,7 @@ impl AoCDay<Input, Output> for Day {
                     .iter()
                     .find(|item| items[1].contains(item) && items[2].contains(item))
                     .map(item_priority)
-                    .unwrap_or(0)
+                    .ok_or("no item found".into())
             })
             .sum()
     }

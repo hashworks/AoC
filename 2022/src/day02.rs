@@ -39,38 +39,38 @@ impl AoCDay<Input, Output> for Day {
             .collect()
     }
 
-    fn part1(&self, input: &Input) -> Output {
+    fn part1(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
         input
             .iter()
             .map(|(left, right)| match (*right, *left) {
-                (PART1_ROCK, OPPONENT_SCISSORS) => 1 + 6,
-                (PART1_PAPER, OPPONENT_ROCK) => 2 + 6,
-                (PART1_SCISSORS, OPPONENT_PAPER) => 3 + 6,
-                (PART1_ROCK, OPPONENT_ROCK) => 1 + 3,
-                (PART1_PAPER, OPPONENT_PAPER) => 2 + 3,
-                (PART1_SCISSORS, OPPONENT_SCISSORS) => 3 + 3,
-                (PART1_ROCK, OPPONENT_PAPER) => 1,
-                (PART1_PAPER, OPPONENT_SCISSORS) => 2,
-                (PART1_SCISSORS, OPPONENT_ROCK) => 3,
-                _ => 0,
+                (PART1_ROCK, OPPONENT_SCISSORS) => Ok(1 + 6),
+                (PART1_PAPER, OPPONENT_ROCK) => Ok(2 + 6),
+                (PART1_SCISSORS, OPPONENT_PAPER) => Ok(3 + 6),
+                (PART1_ROCK, OPPONENT_ROCK) => Ok(1 + 3),
+                (PART1_PAPER, OPPONENT_PAPER) => Ok(2 + 3),
+                (PART1_SCISSORS, OPPONENT_SCISSORS) => Ok(3 + 3),
+                (PART1_ROCK, OPPONENT_PAPER) => Ok(1),
+                (PART1_PAPER, OPPONENT_SCISSORS) => Ok(2),
+                (PART1_SCISSORS, OPPONENT_ROCK) => Ok(3),
+                _ => Err("Invalid input".into()),
             })
             .sum()
     }
 
-    fn part2(&self, input: &Input) -> Output {
+    fn part2(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
         input
             .iter()
             .map(|(left, right)| match (*right, *left) {
-                (PART2_WIN, OPPONENT_SCISSORS) => 1 + 6,
-                (PART2_WIN, OPPONENT_ROCK) => 2 + 6,
-                (PART2_WIN, OPPONENT_PAPER) => 3 + 6,
-                (PART2_DRAW, OPPONENT_ROCK) => 1 + 3,
-                (PART2_DRAW, OPPONENT_PAPER) => 2 + 3,
-                (PART2_DRAW, OPPONENT_SCISSORS) => 3 + 3,
-                (PART2_LOOSE, OPPONENT_PAPER) => 1,
-                (PART2_LOOSE, OPPONENT_SCISSORS) => 2,
-                (PART2_LOOSE, OPPONENT_ROCK) => 3,
-                _ => 0,
+                (PART2_WIN, OPPONENT_SCISSORS) => Ok(1 + 6),
+                (PART2_WIN, OPPONENT_ROCK) => Ok(2 + 6),
+                (PART2_WIN, OPPONENT_PAPER) => Ok(3 + 6),
+                (PART2_DRAW, OPPONENT_ROCK) => Ok(1 + 3),
+                (PART2_DRAW, OPPONENT_PAPER) => Ok(2 + 3),
+                (PART2_DRAW, OPPONENT_SCISSORS) => Ok(3 + 3),
+                (PART2_LOOSE, OPPONENT_PAPER) => Ok(1),
+                (PART2_LOOSE, OPPONENT_SCISSORS) => Ok(2),
+                (PART2_LOOSE, OPPONENT_ROCK) => Ok(3),
+                _ => Err("Invalid input".into()),
             })
             .sum()
     }

@@ -16,12 +16,12 @@ impl AoCDay<Input, Output> for Day {
         Ok(42)
     }
 
-    fn part1(&self, input: &Input) -> Output {
-        *input
+    fn part1(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
+        Ok(*input)
     }
 
-    fn part2(&self, input: &Input) -> Output {
-        *input
+    fn part2(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
+        Ok(*input)
     }
 }
 
