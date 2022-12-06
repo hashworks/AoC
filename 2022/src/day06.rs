@@ -1,6 +1,6 @@
 mod util;
 
-use std::{collections::HashSet, error::Error, io::BufRead};
+use std::{error::Error, io::BufRead};
 use util::{aoc::AoCDay, input::get_reader};
 
 const ID: &str = "day06";
@@ -22,21 +22,20 @@ impl AoCDay<Input, Output> for Day {
     }
 
     fn part1(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
-        Ok(first_distinct_index(input, 4))
+        first_distinct_index(input, 4).ok_or("no distinct window found".into())
     }
 
     fn part2(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
-        Ok(first_distinct_index(input, 14))
+        first_distinct_index(input, 14).ok_or("no distinct window found".into())
     }
 }
 
-fn first_distinct_index(input: &[u8], windowsize: usize) -> usize {
+fn first_distinct_index<T: PartialEq>(input: &[T], windowsize: usize) -> Option<usize> {
     input
         .windows(windowsize)
         .enumerate()
-        .find(|(_, window)| window.iter().collect::<HashSet<&u8>>().len() == windowsize)
+        .find(|(_, w)| !w.iter().enumerate().any(|(i, x)| w[..i].contains(x)))
         .map(|(idx, _)| idx + windowsize)
-        .unwrap()
 }
 
 #[cfg(test)]
