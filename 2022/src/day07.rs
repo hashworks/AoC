@@ -16,7 +16,7 @@ impl AoCDay<Input, Output> for Day {
         let mut files = vec![];
         let mut current_path = PathBuf::from("/");
 
-        for line in reader.lines().skip(2) {
+        for line in reader.lines() {
             let line = line?;
 
             let command = &line[2..4];
@@ -26,7 +26,10 @@ impl AoCDay<Input, Output> for Day {
                         current_path = PathBuf::from("/");
                     }
                     ".." => {
-                        current_path = current_path.parent().unwrap().to_path_buf();
+                        current_path = current_path
+                            .parent()
+                            .ok_or("bad input: no parent")?
+                            .to_path_buf();
                     }
                     subdir => {
                         current_path = current_path.join(subdir);
@@ -35,8 +38,8 @@ impl AoCDay<Input, Output> for Day {
                 "ls" => {}
                 _ => {
                     if line[0..3] != *"dir" {
-                        let (left, right) = line.split_once(' ').unwrap();
-                        let size = left.parse::<usize>().unwrap();
+                        let (left, right) = line.split_once(' ').ok_or("bad input: bad ls")?;
+                        let size = left.parse::<usize>()?;
                         let name = current_path.join(right);
                         files.push((name, size));
                     }
@@ -48,7 +51,7 @@ impl AoCDay<Input, Output> for Day {
     }
 
     fn part1(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
-        let dir_sizes = get_dir_sizes(input);
+        let dir_sizes = get_dir_sizes(input)?;
 
         Ok(dir_sizes
             .iter()
@@ -60,31 +63,29 @@ impl AoCDay<Input, Output> for Day {
     fn part2(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
         let required_space =
             30000000 - (70000000 - input.iter().map(|(_, size)| *size).sum::<usize>());
-        let dir_sizes = get_dir_sizes(input);
+        let dir_sizes = get_dir_sizes(input)?;
 
-        let mut available_for_deletion: Vec<_> = dir_sizes
+        dir_sizes
             .iter()
             .filter(|(_, size)| **size >= required_space)
             .map(|(_, size)| size)
-            .collect();
-
-        available_for_deletion.sort();
-
-        Ok(**available_for_deletion.first().unwrap())
+            .min()
+            .ok_or("no removable dir found".into())
+            .copied()
     }
 }
 
-fn get_dir_sizes(input: &Vec<(PathBuf, usize)>) -> HashMap<String, usize> {
+fn get_dir_sizes(input: &Vec<(PathBuf, usize)>) -> Result<HashMap<String, usize>, Box<dyn Error>> {
     let mut dir_sizes: HashMap<String, usize> = std::collections::HashMap::new();
     for (path, size) in input {
-        for ancestor in path.parent().unwrap().ancestors() {
+        for ancestor in path.parent().ok_or("bad input: no parent")?.ancestors() {
             let dir_size = dir_sizes
                 .entry(ancestor.to_string_lossy().to_string())
                 .or_insert(0);
             *dir_size += size;
         }
     }
-    dir_sizes
+    Ok(dir_sizes)
 }
 
 #[cfg(test)]
@@ -97,7 +98,7 @@ mod tests {
         assert_eq!(
             day.parse_and_solve_part1(format!("{}_test1", ID).as_str())
                 .unwrap(),
-            42
+            95437
         );
     }
 
@@ -107,7 +108,7 @@ mod tests {
         assert_eq!(
             day.parse_and_solve_part2(format!("{}_test1", ID).as_str())
                 .unwrap(),
-            42
+            24933642
         );
     }
 }
