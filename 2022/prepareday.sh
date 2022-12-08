@@ -42,7 +42,6 @@ cp -r "src/template.rs" "src/day${PADDED_DATE}.rs"
 sed -i "s|day00|day${PADDED_DATE}|" "src/day${PADDED_DATE}.rs"
 
 echo "
-
 [[bin]]
 name = \"day${PADDED_DATE}\"
 path = \"src/day${PADDED_DATE}.rs\"" >>Cargo.toml
