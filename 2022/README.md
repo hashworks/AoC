@@ -22,6 +22,8 @@ cargo test --bin day01
 
 ## Results
 
+Please note that the following numbers are relative, and should only be used to compare the performance between commits and days.
+
 |  Day  |  Parsing  |  Part 1  |  Part 2  |
 | :---: | :-------: | :------: | :------: |
 |   1   |   94.66µs |   2.48µs |   8.16µs |
