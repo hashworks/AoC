@@ -45,34 +45,34 @@ impl AoCDay<Input, Output> for Day {
     fn part2(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
         let mut cycle = 0;
         let mut x = 1;
-
-        println!();
+        let mut pixels = vec![];
 
         for op in input {
             cycle += 1;
-            draw_pixel(cycle, x);
+            add_pixel(&mut pixels, cycle, x);
             if let Some(addx) = op {
                 cycle += 1;
-                draw_pixel(cycle, x);
+                add_pixel(&mut pixels, cycle, x);
                 x += addx;
             }
         }
 
+        println!();
+        pixels.chunks_exact(40).for_each(|chunk| {
+            println!("{}", chunk.iter().collect::<String>());
+        });
         println!();
 
         Ok(42)
     }
 }
 
-fn draw_pixel(cycle: i16, x: i16) {
+fn add_pixel(pixels: &mut Vec<char>, cycle: i16, x: i16) {
     let horizontal_position = (cycle - 1) % 40;
     if x + 1 >= horizontal_position && x - 1 <= horizontal_position {
-        print!("\u{2588}");
+        pixels.push('\u{2588}');
     } else {
-        print!(" ");
-    }
-    if cycle % 40 == 0 {
-        println!();
+        pixels.push(' ');
     }
 }
 
