@@ -36,7 +36,7 @@ Please note that the following numbers are relative, and should only be used to 
 |   8   |   14.75µs | 204.94µs | 215.83µs |
 |   9   |   73.35µs | 218.36µs | 198.87µs |
 |  10   |   12.73µs |   0.58µs |   9.41µs |
-|  11   |           |          |          |
+|  11   |   15.69µs |  12.72µs |   5.75µs |
 |  12   |           |          |          |
 |  13   |           |          |          |
 |  14   |           |          |          |
