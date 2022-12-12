@@ -4,7 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-take-until = "0.1.0" # day8
+take-until = "0.1" # day08
+pathfinding = "4"  # day12
 
 [[bin]]
 name = "template"
@@ -52,3 +53,7 @@ path = "src/day10.rs"
 [[bin]]
 name = "day11"
 path = "src/day11.rs"
+
+[[bin]]
+name = "day12"
+path = "src/day12.rs"
