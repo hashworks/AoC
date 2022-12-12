@@ -53,11 +53,11 @@ impl HeightMap {
         }
     }
 
-    fn valid_exit(&self, location_idx: usize, target_idx: usize) -> Option<usize> {
+    fn can_walk_down(&self, location_idx: usize, target_idx: usize) -> Option<usize> {
         let location = self.tiles[location_idx];
         let target = self.tiles[target_idx];
 
-        if target <= location + 1 {
+        if target >= location - 1 {
             Some(target_idx)
         } else {
             None
@@ -69,7 +69,7 @@ impl HeightMap {
         let mut exits = Vec::with_capacity(4);
 
         if l.x > 0 {
-            if let Some(idx) = self.valid_exit(
+            if let Some(idx) = self.can_walk_down(
                 location_idx,
                 self.point2d_to_index(Point::new(l.x - 1, l.y)),
             ) {
@@ -77,7 +77,7 @@ impl HeightMap {
             }
         }
         if l.y > 0 {
-            if let Some(idx) = self.valid_exit(
+            if let Some(idx) = self.can_walk_down(
                 location_idx,
                 self.point2d_to_index(Point::new(l.x, l.y - 1)),
             ) {
@@ -85,7 +85,7 @@ impl HeightMap {
             }
         }
         if l.x < self.width - 1 {
-            if let Some(idx) = self.valid_exit(
+            if let Some(idx) = self.can_walk_down(
                 location_idx,
                 self.point2d_to_index(Point::new(l.x + 1, l.y)),
             ) {
@@ -93,7 +93,7 @@ impl HeightMap {
             }
         }
         if l.y < self.height - 1 {
-            if let Some(idx) = self.valid_exit(
+            if let Some(idx) = self.can_walk_down(
                 location_idx,
                 self.point2d_to_index(Point::new(l.x, l.y + 1)),
             ) {
@@ -135,33 +135,27 @@ impl AoCDay<Input, Output> for Day {
     }
 
     fn part1(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
-        if let Some((_, path_len)) = dijkstra(
-            &input.start,
+        if let Some((_, cost)) = dijkstra(
+            &input.end,
             |idx| input.get_available_exits(*idx),
-            |&idx| idx == input.end,
+            |&idx| idx == input.start,
         ) {
-            Ok(path_len)
+            Ok(cost)
         } else {
             Err("No path found".into())
         }
     }
 
     fn part2(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
-        input
-            .tiles
-            .iter()
-            .enumerate()
-            .filter(|&(_, &tile)| tile == b'a')
-            .filter_map(|(idx, _)| {
-                dijkstra(
-                    &idx,
-                    |idx| input.get_available_exits(*idx),
-                    |&idx| idx == input.end,
-                )
-                .map(|(_, path_cost)| path_cost)
-            })
-            .min()
-            .ok_or("No path found".into())
+        if let Some((_, cost)) = dijkstra(
+            &input.end,
+            |idx| input.get_available_exits(*idx),
+            |&idx| input.tiles[idx] == b'a',
+        ) {
+            Ok(cost)
+        } else {
+            Err("No path found".into())
+        }
     }
 }
 
