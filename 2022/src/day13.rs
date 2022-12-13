@@ -8,20 +8,10 @@ const ID: &str = "day13";
 type Input = Vec<(ListOrInt, ListOrInt)>;
 type Output = usize;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 enum ListOrInt {
     List(Vec<ListOrInt>),
     Int(u8),
-}
-
-impl PartialEq for ListOrInt {
-    fn eq(&self, other: &Self) -> bool {
-        match (self, other) {
-            (ListOrInt::Int(a), ListOrInt::Int(b)) => a == b,
-            (ListOrInt::List(a), ListOrInt::List(b)) => a == b,
-            _ => false,
-        }
-    }
 }
 
 impl PartialOrd for ListOrInt {
