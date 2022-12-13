@@ -1,6 +1,9 @@
 mod util;
 
-use nom::{character::complete, error::ErrorKind, multi::separated_list1, IResult};
+use nom::branch::alt;
+use nom::multi::separated_list0;
+use nom::sequence::tuple;
+use nom::{character::complete, error::ErrorKind, IResult};
 use std::{error::Error, io::BufRead};
 use util::{aoc::AoCDay, input::get_reader};
 
@@ -39,17 +42,21 @@ impl PartialOrd for ListOrInt {
     }
 }
 
-fn parse_list(i: &str) -> IResult<&str, ListOrInt, (&str, ErrorKind)> {
-    if let Ok((i, _)) = complete::char::<_, nom::error::Error<_>>('[')(i) {
-        let (i, o) = separated_list1(complete::char(','), parse_list)(i)?;
-        let (i, _) = complete::char(']')(i)?;
+fn parse_int(i: &str) -> IResult<&str, ListOrInt, (&str, ErrorKind)> {
+    complete::u8(i).map(|(i, o)| (i, ListOrInt::Int(o)))
+}
 
-        Ok((i, ListOrInt::List(o)))
-    } else if let Ok((i, o)) = complete::u8::<_, nom::error::Error<_>>(i) {
-        Ok((i, ListOrInt::Int(o)))
-    } else {
-        Ok((i, ListOrInt::List(vec![])))
-    }
+fn parse_list(i: &str) -> IResult<&str, ListOrInt, (&str, ErrorKind)> {
+    tuple((
+        complete::char('['),
+        separated_list0(complete::char(','), parse_list_or_int),
+        complete::char(']'),
+    ))(i)
+    .map(|(i, (_, o, _))| (i, ListOrInt::List(o)))
+}
+
+fn parse_list_or_int(i: &str) -> IResult<&str, ListOrInt, (&str, ErrorKind)> {
+    alt((parse_list, parse_int))(i)
 }
 
 struct Day {}
@@ -62,11 +69,11 @@ impl AoCDay<Input, Output> for Day {
             .collect::<Vec<_>>()
             .chunks(3)
             .map(|pairs| {
-                let left = match parse_list(&pairs[0]) {
+                let left = match parse_list_or_int(&pairs[0]) {
                     Ok((_, o)) => o,
                     Err(e) => Err(format!("Parse error: {:?}", e))?,
                 };
-                let right = match parse_list(&pairs[1]) {
+                let right = match parse_list_or_int(&pairs[1]) {
                     Ok((_, o)) => o,
                     Err(e) => Err(format!("Parse error: {:?}", e))?,
                 };
