@@ -1,10 +1,7 @@
 mod util;
 
-use nom::branch::alt;
-use nom::multi::separated_list0;
-use nom::sequence::tuple;
-use nom::{character::complete, error::ErrorKind, IResult};
-use std::{error::Error, io::BufRead};
+use nom::{branch::alt, character::complete, multi::separated_list0, sequence::tuple, IResult};
+use std::{cmp::Ordering, error::Error, io::BufRead};
 use util::{aoc::AoCDay, input::get_reader};
 
 const ID: &str = "day13";
@@ -28,7 +25,7 @@ impl PartialEq for ListOrInt {
 }
 
 impl PartialOrd for ListOrInt {
-    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         match (self, other) {
             (ListOrInt::Int(a), ListOrInt::Int(b)) => a.partial_cmp(b),
             (ListOrInt::List(a), ListOrInt::List(b)) => a.partial_cmp(b),
@@ -42,11 +39,11 @@ impl PartialOrd for ListOrInt {
     }
 }
 
-fn parse_int(i: &str) -> IResult<&str, ListOrInt, (&str, ErrorKind)> {
+fn parse_int(i: &str) -> IResult<&str, ListOrInt> {
     complete::u8(i).map(|(i, o)| (i, ListOrInt::Int(o)))
 }
 
-fn parse_list(i: &str) -> IResult<&str, ListOrInt, (&str, ErrorKind)> {
+fn parse_list(i: &str) -> IResult<&str, ListOrInt> {
     tuple((
         complete::char('['),
         separated_list0(complete::char(','), parse_list_or_int),
@@ -55,7 +52,7 @@ fn parse_list(i: &str) -> IResult<&str, ListOrInt, (&str, ErrorKind)> {
     .map(|(i, (_, o, _))| (i, ListOrInt::List(o)))
 }
 
-fn parse_list_or_int(i: &str) -> IResult<&str, ListOrInt, (&str, ErrorKind)> {
+fn parse_list_or_int(i: &str) -> IResult<&str, ListOrInt> {
     alt((parse_list, parse_int))(i)
 }
 
@@ -97,12 +94,13 @@ impl AoCDay<Input, Output> for Day {
             .flat_map(|(left, right)| vec![left, right])
             .collect::<Vec<_>>();
 
-        let divider_packet_1 = ListOrInt::List(vec![ListOrInt::Int(2)]);
-        let divider_packet_2 = ListOrInt::List(vec![ListOrInt::Int(6)]);
+        let divider = |i| ListOrInt::List(vec![ListOrInt::Int(i)]);
+        let divider_packet_1 = divider(2);
+        let divider_packet_2 = divider(6);
         all.push(&divider_packet_1);
         all.push(&divider_packet_2);
 
-        all.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Less));
+        all.sort_by(|a, b| a.partial_cmp(b).unwrap_or(Ordering::Less));
 
         Ok(all
             .iter()
