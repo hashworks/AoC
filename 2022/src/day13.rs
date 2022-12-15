@@ -8,7 +8,7 @@ const ID: &str = "day13";
 type Input = Vec<(ListOrInt, ListOrInt)>;
 type Output = usize;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 enum ListOrInt {
     List(Vec<ListOrInt>),
     Int(u8),
@@ -29,6 +29,12 @@ impl PartialOrd for ListOrInt {
     }
 }
 
+impl Ord for ListOrInt {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.partial_cmp(other).unwrap()
+    }
+}
+
 fn parse_int(i: &str) -> IResult<&str, ListOrInt> {
     complete::u8(i).map(|(i, o)| (i, ListOrInt::Int(o)))
 }
@@ -42,6 +48,7 @@ fn parse_list(i: &str) -> IResult<&str, ListOrInt> {
     .map(|(i, (_, o, _))| (i, ListOrInt::List(o)))
 }
 
+// This can be parsed using serde_json, but I wanted to try nom
 fn parse_list_or_int(i: &str) -> IResult<&str, ListOrInt> {
     alt((parse_list, parse_int))(i)
 }
@@ -79,25 +86,22 @@ impl AoCDay<Input, Output> for Day {
     }
 
     fn part2(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
+        let dividers = [
+            ListOrInt::List(vec![ListOrInt::Int(2)]),
+            ListOrInt::List(vec![ListOrInt::Int(6)]),
+        ];
+
         let mut all = input
             .iter()
-            .flat_map(|(left, right)| vec![left, right])
+            .flat_map(|(left, right)| [left, right])
+            .chain(dividers.iter())
             .collect::<Vec<_>>();
 
-        let divider = |i| ListOrInt::List(vec![ListOrInt::Int(i)]);
-        let divider_packet_1 = divider(2);
-        let divider_packet_2 = divider(6);
-        all.push(&divider_packet_1);
-        all.push(&divider_packet_2);
+        all.sort();
 
-        all.sort_by(|a, b| a.partial_cmp(b).unwrap_or(Ordering::Less));
-
-        Ok(all
+        Ok(dividers
             .iter()
-            .enumerate()
-            .filter(|&(_, &packet)| packet == &divider_packet_1 || packet == &divider_packet_2)
-            .take(2)
-            .map(|(i, _)| i + 1)
+            .map(|x| all.binary_search(&x).expect("assertion: contains x") + 1)
             .product())
     }
 }
