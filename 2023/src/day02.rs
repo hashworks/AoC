@@ -52,10 +52,9 @@ impl AoCDay<Input, Output> for Day {
                         "red" => sampling.red = color_split[0].parse::<usize>()?,
                         "green" => sampling.green = color_split[0].parse::<usize>()?,
                         "blue" => sampling.blue = color_split[0].parse::<usize>()?,
-                        _ => panic!("Unknown color {}, aborting", color_split[1]),
+                        _ => Err("Invalid color")?,
                     }
                 }
-
                 game.rounds.push(sampling);
             }
 
@@ -65,45 +64,36 @@ impl AoCDay<Input, Output> for Day {
         Ok(games)
     }
 
-    fn part1(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
-        let mut possible_games_sum = 0;
-
-        'game_loop: for game in input {
-            for sampling in &game.rounds {
-                if sampling.red > 12 || sampling.green > 13 || sampling.blue > 14 {
-                    continue 'game_loop;
-                }
-            }
-            possible_games_sum += game.id;
-        }
-
-        Ok(possible_games_sum)
+    fn part1(&self, games: &Input) -> Result<Output, Box<dyn Error>> {
+        Ok(games
+            .iter()
+            .filter(|game| {
+                game.rounds.iter().all(|sampling| {
+                    sampling.red <= 12 && sampling.green <= 13 && sampling.blue <= 14
+                })
+            })
+            .map(|game| game.id)
+            .sum())
     }
 
-    fn part2(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
-        let mut power_sum = 0;
+    fn part2(&self, games: &Input) -> Result<Output, Box<dyn Error>> {
+        Ok(games
+            .iter()
+            .map(|game| {
+                // Note: It isn't specified what the power of a set is if a color isn't present in a sampling. I'm assuming it's 0.
+                let mut max_red = 0;
+                let mut max_green = 0;
+                let mut max_blue = 0;
 
-        for game in input {
-            let mut min_red = 0;
-            let mut min_green = 0;
-            let mut min_blue = 0;
+                game.rounds.iter().for_each(|sampling| {
+                    max_red = sampling.red.max(max_red);
+                    max_blue = sampling.blue.max(max_blue);
+                    max_green = sampling.green.max(max_green);
+                });
 
-            for sampling in &game.rounds {
-                if sampling.red > min_red {
-                    min_red = sampling.red;
-                }
-                if sampling.blue > min_blue {
-                    min_blue = sampling.blue;
-                }
-                if sampling.green > min_green {
-                    min_green = sampling.green;
-                }
-            }
-
-            power_sum += min_red * min_green * min_blue;
-        }
-
-        Ok(power_sum)
+                max_red * max_green * max_blue
+            })
+            .sum())
     }
 }
 
