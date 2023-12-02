@@ -25,6 +25,10 @@ impl AoCDay<Input, Output> for Day {
     }
 }
 
+fn main() {
+    Day {}.run(ID);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -48,8 +52,4 @@ mod tests {
             42
         );
     }
-}
-
-fn main() {
-    Day {}.run(ID);
 }
