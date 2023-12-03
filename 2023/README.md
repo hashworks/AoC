@@ -20,7 +20,37 @@ cargo test --bin day01
 
 `INPUT` can be set to provide a path to a specific file as input. Otherwise, `inputs/day{ID}.txt` will be used.
 
-## Results
+## Personal Times
+
+|  Day |   Part 1 |   Part 2 | Notes |
+| ---: | -------: | -------: | ----: |
+|   01 | 00:18:44 | 00:49:15 |       |
+|   02 | 00:24:47 | 00:28:03 |       |
+|   03 | 01:28:32 | 01:50:54 |       |
+|   04 |          |          |       |
+|   05 |          |          |       |
+|   06 |          |          |       |
+|   07 |          |          |       |
+|   08 |          |          |       |
+|   09 |          |          |       |
+|   10 |          |          |       |
+|   11 |          |          |       |
+|   12 |          |          |       |
+|   13 |          |          |       |
+|   14 |          |          |       |
+|   15 |          |          |       |
+|   16 |          |          |       |
+|   17 |          |          |       |
+|   18 |          |          |       |
+|   19 |          |          |       |
+|   20 |          |          |       |
+|   21 |          |          |       |
+|   22 |          |          |       |
+|   23 |          |          |       |
+|   24 |          |          |       |
+|   25 |          |          |       |
+
+## Performance
 
 Please note that the following numbers are relative, and should only be used to compare the performance between commits and days.
 
