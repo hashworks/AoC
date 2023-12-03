@@ -28,7 +28,7 @@ Please note that the following numbers are relative, and should only be used to 
 | ---: | --------: | ------: | --------: | ----: |
 |   01 | 196.996µs | 25.67µs | 124.332µs |       |
 |   02 | 139.442µs |  1.07µs |     710ns |       |
-|   03 |           |         |           |       |
+|   03 | 108.371µs | 78.06µs |  81.791µs |       |
 |   04 |           |         |           |       |
 |   05 |           |         |           |       |
 |   06 |           |         |           |       |
