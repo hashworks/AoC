@@ -10,8 +10,8 @@ type Output = usize;
 struct Day {}
 
 impl AoCDay<Input, Output> for Day {
-    fn parse_input(&self, _id: &str) -> Result<Input, Box<dyn Error>> {
-        let reader = get_reader(_id)?;
+    fn parse_input(&self, id: &str) -> Result<Input, Box<dyn Error>> {
+        let reader = get_reader(id)?;
 
         let mut output = Vec::new();
 
