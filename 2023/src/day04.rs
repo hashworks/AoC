@@ -36,7 +36,6 @@ impl AoCDay<Input, Output> for Day {
                 .next()
                 .ok_or("Parse Error: malformed input")?
                 .split(' ')
-                .filter(|s| !s.is_empty())
                 .filter(|s| winning_numbers.contains(s))
                 .count();
 
@@ -58,11 +57,7 @@ impl AoCDay<Input, Output> for Day {
 
         for id in 0..input.len() {
             let (won_copies, matching_numbers) = input[id];
-            for (copies, _) in input
-                .iter_mut()
-                .take(id + matching_numbers + 1)
-                .skip(id + 1)
-            {
+            for (copies, _) in input.iter_mut().skip(id + 1).take(matching_numbers) {
                 *copies += won_copies;
             }
         }
