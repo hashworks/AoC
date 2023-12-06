@@ -36,10 +36,11 @@ impl AoCDay<Input, Output> for Day {
         Ok(input
             .iter()
             .map(|(time, distance_record)| {
-                (1..*time)
+                let min = (1..*time)
                     .zip((1..*time).rev())
-                    .filter(|(hold, travel)| hold * travel > *distance_record)
-                    .count()
+                    .take_while(|(hold, travel)| hold * travel <= *distance_record)
+                    .count();
+                time - min * 2 - 1
             })
             .product())
     }
@@ -49,18 +50,20 @@ impl AoCDay<Input, Output> for Day {
             ("".to_owned(), "".to_owned()),
             |(one_time, one_distance_record), (time, distance_record)| {
                 (
-                    (one_time.to_owned() + &time.to_string()),
-                    (one_distance_record.to_owned() + &distance_record.to_string()),
+                    (one_time + &time.to_string()),
+                    (one_distance_record + &distance_record.to_string()),
                 )
             },
         );
         let one_time = one_time.parse::<usize>()?;
         let one_distance_record = one_distance_record.parse::<usize>()?;
 
-        Ok((1..one_time)
+        let min = (1..one_time)
             .zip((1..one_time).rev())
-            .filter(|(hold, travel)| hold * travel > one_distance_record)
-            .count())
+            .take_while(|(hold, travel)| hold * travel <= one_distance_record)
+            .count();
+
+        Ok(one_time - min * 2 - 1)
     }
 }
 
