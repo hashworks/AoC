@@ -7,12 +7,9 @@ edition = "2021"
 rayon = "1" # day5
 
 [[bin]]
-name = "template"
-path = "src/template.rs"
-
-[[bin]]
 name = "day01"
 path = "src/day01.rs"
+
 [[bin]]
 name = "day02"
 path = "src/day02.rs"

@@ -37,6 +37,7 @@ impl AoCDay<Input, Output> for Day {
                 let line = line?;
                 let chars = line.chars().collect::<Vec<_>>();
 
+                #[allow(clippy::get_first)]
                 let a1 = chars.get(0).ok_or("No a1 char")?;
                 let a2 = chars.get(1).ok_or("No a2 char")?;
                 let a3 = chars.get(2).ok_or("No a3 char")?;
