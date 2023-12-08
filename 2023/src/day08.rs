@@ -46,9 +46,9 @@ impl AoCDay<Input, Output> for Day {
                 let b2 = chars.get(8).ok_or("No b2 char")?;
                 let b3 = chars.get(9).ok_or("No b3 char")?;
 
-                let c1 = chars.get(12).ok_or("No b1 char")?;
-                let c2 = chars.get(13).ok_or("No b2 char")?;
-                let c3 = chars.get(14).ok_or("No b3 char")?;
+                let c1 = chars.get(12).ok_or("No c1 char")?;
+                let c2 = chars.get(13).ok_or("No c2 char")?;
+                let c3 = chars.get(14).ok_or("No c3 char")?;
 
                 Ok(([*a1, *a2, *a3], ([*b1, *b2, *b3], [*c1, *c2, *c3])))
             })
