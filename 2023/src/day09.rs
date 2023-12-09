@@ -32,8 +32,7 @@ impl AoCDay<Input, Output> for Day {
             .map(|numbers| {
                 get_differences(numbers)
                     .iter()
-                    .rev()
-                    .fold(0, |acc, numbers| acc + numbers.last().unwrap_or(&0))
+                    .rfold(0, |acc, numbers| acc + numbers.last().unwrap_or(&0))
             })
             .sum())
     }
@@ -44,8 +43,7 @@ impl AoCDay<Input, Output> for Day {
             .map(|numbers| {
                 get_differences(numbers)
                     .iter()
-                    .rev()
-                    .fold(0, |acc, numbers| numbers.first().unwrap_or(&0) - acc)
+                    .rfold(0, |acc, numbers| numbers.first().unwrap_or(&0) - acc)
             })
             .sum())
     }
@@ -60,7 +58,7 @@ fn get_differences(numbers: &[isize]) -> Vec<Vec<isize>> {
                 .last()
                 .unwrap()
                 .windows(2)
-                .map(|chunk| chunk[1] - chunk[0])
+                .map(|w| w[1] - w[0])
                 .collect(),
         );
     }
