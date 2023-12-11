@@ -20,7 +20,6 @@ pub(crate) trait AoCDay<I, O: std::fmt::Display> {
             before_part1.elapsed(),
             part1.unwrap(),
         );
-
         let pefore_part2 = Instant::now();
         let part2 = self.part2(&input);
         println!(
