@@ -1,6 +1,7 @@
 mod util;
 
-use std::{collections::HashMap, error::Error, io::BufRead};
+use pathfinding::directed::cycle_detection::floyd;
+use std::{error::Error, io::BufRead};
 use util::{aoc::AoCDay, input::get_reader};
 
 const ID: &str = "day14";
@@ -38,27 +39,25 @@ impl AoCDay<Input, Output> for Day {
     }
 
     fn part2(&self, map: &Input) -> Result<Output, Box<dyn Error>> {
-        let mut map = map.clone();
+        let (cycle_size, map, index_of_first_element) = floyd(map.clone(), cycle);
 
-        let mut cache = HashMap::<Input, Input>::new();
+        let remaining_cycles = (1000000000 - index_of_first_element) % cycle_size;
 
-        for _ in 0..1000 {
-            if let Some(known_target_state) = cache.get(&map) {
-                map = known_target_state.clone();
-                continue;
-            }
-
-            let previous_state = map.clone();
-            map = tilt_north(&mut map).to_vec();
-            map = tilt_west(&mut map).to_vec();
-            map = tilt_south(&mut map).to_vec();
-            map = tilt_east(&mut map).to_vec();
-
-            cache.insert(previous_state, map.clone());
-        }
-
-        Ok(calculate_load(&map))
+        Ok(calculate_load(
+            &(0..remaining_cycles).fold(map.clone(), |map, _| cycle(map)),
+        ))
     }
+}
+
+fn cycle(map: Input) -> Input {
+    let mut map = map.clone();
+
+    map = tilt_north(&mut map).to_vec();
+    map = tilt_west(&mut map).to_vec();
+    map = tilt_south(&mut map).to_vec();
+    map = tilt_east(&mut map).to_vec();
+
+    map
 }
 
 fn calculate_load(map: &Input) -> usize {

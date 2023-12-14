@@ -4,7 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-rayon = "1" # day5
+rayon = "1"       # day5, day12
+pathfinding = "4" # day14
 
 [[bin]]
 name = "day01"
