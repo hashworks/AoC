@@ -1,6 +1,6 @@
 mod util;
 
-use rayon::iter::{IntoParallelRefIterator, ParallelBridge, ParallelIterator};
+use rayon::iter::{ParallelBridge, ParallelIterator};
 use std::{collections::HashSet, error::Error, io::BufRead};
 use util::{aoc::AoCDay, input::get_reader};
 
