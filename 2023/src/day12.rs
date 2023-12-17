@@ -66,25 +66,15 @@ fn multiply(
     spring_states: &[Option<State>],
     broken_group_sizes: &[usize],
 ) -> (Vec<Option<State>>, Vec<usize>) {
-    let spring_states = [
-        spring_states.to_owned(),
-        vec![None],
-        spring_states.to_owned(),
-        vec![None],
-        spring_states.to_owned(),
-        vec![None],
-        spring_states.to_owned(),
-        vec![None],
-        spring_states.to_owned(),
-    ]
-    .iter()
-    .flatten()
-    .cloned()
-    .collect::<Vec<_>>();
+    let spring_states = (0..9)
+        .flat_map(|i| if i % 2 == 0 { spring_states } else { &[None] })
+        .map(|s| s.to_owned())
+        .collect::<Vec<_>>();
 
     let broken_group_sizes = (0..5)
         .flat_map(|_| broken_group_sizes.iter().cloned())
-        .collect::<Vec<_>>();
+        .collect();
+
     (spring_states, broken_group_sizes)
 }
 
