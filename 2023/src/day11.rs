@@ -77,13 +77,13 @@ fn calulate_distances(galaxies: &Input, time_warp: usize) -> Result<Output, Box<
             moved_galaxies
                 .iter()
                 .skip(i + 1)
-                .map(|galaxy_b| hamilton_distance(*galaxy_a, *galaxy_b))
+                .map(|galaxy_b| manhatten_distance(*galaxy_a, *galaxy_b))
                 .sum::<usize>()
         })
         .sum())
 }
 
-fn hamilton_distance((a_y, a_x): (usize, usize), (b_y, b_x): (usize, usize)) -> usize {
+fn manhatten_distance((a_y, a_x): (usize, usize), (b_y, b_x): (usize, usize)) -> usize {
     (a_y as isize - b_y as isize).unsigned_abs() + (a_x as isize - b_x as isize).unsigned_abs()
 }
 
@@ -96,11 +96,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_hamilton_distance() {
-        assert_eq!(hamilton_distance((6, 1), (11, 5)), 9);
-        assert_eq!(hamilton_distance((0, 4), (10, 9)), 15);
-        assert_eq!(hamilton_distance((0, 2), (7, 12)), 17);
-        assert_eq!(hamilton_distance((11, 0), (11, 5)), 5);
+    fn test_manhatten_distance() {
+        assert_eq!(manhatten_distance((6, 1), (11, 5)), 9);
+        assert_eq!(manhatten_distance((0, 4), (10, 9)), 15);
+        assert_eq!(manhatten_distance((0, 2), (7, 12)), 17);
+        assert_eq!(manhatten_distance((11, 0), (11, 5)), 5);
     }
 
     #[test]
