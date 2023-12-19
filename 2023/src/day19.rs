@@ -230,24 +230,23 @@ fn calculate_variants(
         "A" => x_range.count() * m_range.count() * a_range.count() * s_range.count(),
         "R" => 0,
         workflow_name => {
-            let mut x_range = x_range;
-            let mut m_range = m_range;
-            let mut a_range = a_range;
-            let mut s_range = s_range;
-
             if let Some(workflow) = workflows.get(workflow_name) {
+                let mut x_range = x_range;
+                let mut m_range = m_range;
+                let mut a_range = a_range;
+                let mut s_range = s_range;
                 workflow
                     .iter()
                     .map(|rule| {
                         if let Some(comparisation) = &rule.comparisation {
                             match comparisation.cat {
                                 Cat::X => {
-                                    let (true_range, false_range) =
-                                        get_ranges(x_range.clone(), comparisation);
-                                    x_range = false_range;
+                                    let (true_x_range, false_x_range) =
+                                        get_ranges(&x_range, comparisation);
+                                    x_range = false_x_range;
                                     calculate_variants(
                                         workflows,
-                                        true_range,
+                                        true_x_range,
                                         m_range.clone(),
                                         a_range.clone(),
                                         s_range.clone(),
@@ -255,41 +254,41 @@ fn calculate_variants(
                                     )
                                 }
                                 Cat::M => {
-                                    let (true_range, false_range) =
-                                        get_ranges(m_range.clone(), comparisation);
-                                    m_range = false_range;
+                                    let (true_m_range, false_m_range) =
+                                        get_ranges(&m_range, comparisation);
+                                    m_range = false_m_range;
                                     calculate_variants(
                                         workflows,
                                         x_range.clone(),
-                                        true_range,
+                                        true_m_range,
                                         a_range.clone(),
                                         s_range.clone(),
                                         rule.target.as_str(),
                                     )
                                 }
                                 Cat::A => {
-                                    let (true_range, false_range) =
-                                        get_ranges(a_range.clone(), comparisation);
-                                    a_range = false_range;
+                                    let (true_a_range, false_a_range) =
+                                        get_ranges(&a_range, comparisation);
+                                    a_range = false_a_range;
                                     calculate_variants(
                                         workflows,
                                         x_range.clone(),
                                         m_range.clone(),
-                                        true_range,
+                                        true_a_range,
                                         s_range.clone(),
                                         rule.target.as_str(),
                                     )
                                 }
                                 Cat::S => {
-                                    let (true_range, false_range) =
-                                        get_ranges(s_range.clone(), comparisation);
-                                    s_range = false_range;
+                                    let (true_s_range, false_s_range) =
+                                        get_ranges(&s_range, comparisation);
+                                    s_range = false_s_range;
                                     calculate_variants(
                                         workflows,
                                         x_range.clone(),
                                         m_range.clone(),
                                         a_range.clone(),
-                                        true_range,
+                                        true_s_range,
                                         rule.target.as_str(),
                                     )
                                 }
@@ -314,7 +313,7 @@ fn calculate_variants(
 }
 
 fn get_ranges(
-    range: RangeInclusive<usize>,
+    range: &RangeInclusive<usize>,
     comparisation: &Comparisation,
 ) -> (RangeInclusive<usize>, RangeInclusive<usize>) {
     match comparisation.comperator {
@@ -365,7 +364,7 @@ mod tests {
             comperator: Comperator::LT,
             value: 1351,
         };
-        let (true_range, false_range) = get_ranges(range, &comparisation);
+        let (true_range, false_range) = get_ranges(&range, &comparisation);
         assert_eq!(true_range, 1..=1350);
         assert_eq!(false_range, 1351..=4000);
     }
@@ -378,7 +377,7 @@ mod tests {
             comperator: Comperator::GT,
             value: 2770,
         };
-        let (true_range, false_range) = get_ranges(range, &comparisation);
+        let (true_range, false_range) = get_ranges(&range, &comparisation);
         assert_eq!(true_range, 2771..=4000);
         assert_eq!(false_range, 1351..=2770);
     }
