@@ -44,7 +44,7 @@ impl AoCDay<Input, Output> for Day {
     }
 
     fn part2(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
-        let mut dict = HashMap::new();
+        let mut dict = HashMap::with_capacity(input.1.len());
 
         input.1.iter().for_each(|num| {
             *(dict.entry(*num).or_insert(0)) += 1;

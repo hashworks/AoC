@@ -58,7 +58,7 @@ Please note that the following numbers are relative, and should only be used to 
 
 |  Day |   Parsing |   Part 1 |   Part 2 | Notes |
 | ---: | --------: | -------: | -------: | ----: |
-|   01 | 119.845µs | 39.323µs | 37.721µs |       |
+|   01 | 119.845µs | 39.323µs | 27.732µs |       |
 |   02 |           |          |          |       |
 |   03 |           |          |          |       |
 |   04 |           |          |          |       |
