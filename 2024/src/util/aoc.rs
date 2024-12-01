@@ -30,11 +30,13 @@ pub(crate) trait AoCDay<I, O: std::fmt::Display> {
         );
     }
 
+    #[allow(unused)]
     fn parse_and_solve_part1(&self, id: &str) -> Result<O, Box<dyn Error>> {
         let input = self.parse_input(id)?;
         self.part1(&input)
     }
 
+    #[allow(unused)]
     fn parse_and_solve_part2(&self, id: &str) -> Result<O, Box<dyn Error>> {
         let input = self.parse_input(id)?;
         self.part2(&input)

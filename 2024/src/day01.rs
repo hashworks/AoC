@@ -1,6 +1,6 @@
 mod util;
 
-use std::{error::Error, io::BufRead};
+use std::{collections::HashMap, error::Error, io::BufRead};
 use util::{aoc::AoCDay, input::get_reader};
 
 const ID: &str = "day01";
@@ -44,9 +44,16 @@ impl AoCDay<Input, Output> for Day {
     }
 
     fn part2(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
-        Ok(input.0.iter().fold(0, |acc, num1| {
-            acc + num1 * input.1.iter().filter(|num2| *num2 == num1).count() as isize
-        }))
+        let mut dict = HashMap::new();
+
+        input.1.iter().for_each(|num| {
+            *(dict.entry(*num).or_insert(0)) += 1;
+        });
+
+        Ok(input
+            .0
+            .iter()
+            .fold(0, |acc, num1| acc + num1 * dict.get(num1).unwrap_or(&0)))
     }
 }
 
