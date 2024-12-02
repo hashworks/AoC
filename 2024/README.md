@@ -27,7 +27,7 @@ Times are normalized from input download to correct answer, not the time on the 
 |  Day |   Part 1 | Rank Part 1 |   Part 2 | Rank Part 2 | Notes |
 | ---: | -------: | ----------: | -------: | ----------: | ----: |
 |   01 | 00:12:00 |       28688 | 00:17:00 |       26554 |       |
-|   02 |          |             |          |             |       |
+|   02 | 00:12:34 |        5392 | 00:30:03 |        5166 |       |
 |   03 |          |             |          |             |       |
 |   04 |          |             |          |             |       |
 |   05 |          |             |          |             |       |
