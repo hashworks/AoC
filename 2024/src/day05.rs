@@ -41,7 +41,21 @@ impl AoCDay<Input, Output> for Day {
     fn part1(&self, (rules, updates): &Input) -> Result<Output, Box<dyn Error>> {
         Ok(updates
             .iter()
-            .filter(|pages| validate(pages, rules))
+            .filter_map(|pages| {
+                let mut sorted_pages = pages.clone();
+                sorted_pages.sort_by(|a, b| {
+                    if rules.contains(&(*a, *b)) {
+                        std::cmp::Ordering::Less
+                    } else {
+                        std::cmp::Ordering::Greater
+                    }
+                });
+                if pages == &sorted_pages {
+                    Some(sorted_pages)
+                } else {
+                    None
+                }
+            })
             .map(|pages| pages[pages.len() / 2])
             .sum())
     }
@@ -49,38 +63,24 @@ impl AoCDay<Input, Output> for Day {
     fn part2(&self, (rules, updates): &Input) -> Result<Output, Box<dyn Error>> {
         Ok(updates
             .iter()
-            .filter(|pages| !validate(pages, rules))
-            .map(|pages| {
-                let mut pages = pages.clone();
-                pages.sort_by(|a, b| {
+            .filter_map(|pages| {
+                let mut sorted_pages = pages.clone();
+                sorted_pages.sort_by(|a, b| {
                     if rules.contains(&(*a, *b)) {
                         std::cmp::Ordering::Less
                     } else {
                         std::cmp::Ordering::Greater
                     }
                 });
-                pages
+                if pages == &sorted_pages {
+                    None
+                } else {
+                    Some(sorted_pages)
+                }
             })
             .map(|pages| pages[pages.len() / 2])
             .sum())
     }
-}
-
-fn validate(pages: &[usize], rules: &HashSet<(usize, usize)>) -> bool {
-    pages.iter().enumerate().all(|(i, page)| {
-        if i == 0 || i == pages.len() - 1 {
-            true
-        } else {
-            let prev_slice = &pages[0..i];
-            let after_slice = &pages[i + 1..];
-            prev_slice
-                .iter()
-                .all(|prev_page| rules.contains(&(*prev_page, *page)))
-                && after_slice
-                    .iter()
-                    .all(|after_page| rules.contains(&(*page, *after_page)))
-        }
-    })
 }
 
 fn main() {
