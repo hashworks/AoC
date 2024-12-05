@@ -41,17 +41,7 @@ impl AoCDay<Input, Output> for Day {
     fn part1(&self, (rules, updates): &Input) -> Result<Output, Box<dyn Error>> {
         Ok(updates
             .iter()
-            .filter(|&pages| {
-                let mut sorted_pages = pages.clone();
-                sorted_pages.sort_by(|a, b| {
-                    if rules.contains(&(*a, *b)) {
-                        std::cmp::Ordering::Less
-                    } else {
-                        std::cmp::Ordering::Greater
-                    }
-                });
-                pages == &sorted_pages
-            })
+            .filter(|&pages| pages.is_sorted_by(|a, b| rules.contains(&(*a, *b))))
             .map(|pages| pages[pages.len() / 2])
             .sum())
     }

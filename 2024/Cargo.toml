@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 regex = "1.11.1"
+is_sorted = "0.1.1"
 
 [[bin]]
 name = "day01"
