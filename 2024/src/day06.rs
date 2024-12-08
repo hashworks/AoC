@@ -1,10 +1,12 @@
 mod util;
 
-use std::{collections::HashSet, error::Error, io::BufRead, sync::PoisonError};
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
+use std::{collections::HashSet, error::Error, hash::Hash, io::BufRead};
 use util::{aoc::AoCDay, input::get_reader};
 
 const ID: &str = "day06";
 
+#[derive(PartialEq, Eq, Hash)]
 enum Direction {
     N,
     E,
@@ -44,21 +46,9 @@ impl Direction {
 }
 
 struct Map {
-    direction: Direction,
-    position: (isize, isize),
+    start_direction: Direction,
+    start_position: (isize, isize),
     obstacles: Vec<Vec<bool>>,
-    visited_positions: Vec<(isize, isize, Direction)>,
-}
-
-impl Clone for Map {
-    fn clone(&self) -> Self {
-        Map {
-            direction: self.direction.clone(),
-            position: self.position,
-            obstacles: self.obstacles.clone(),
-            visited_positions: self.visited_positions.clone(),
-        }
-    }
 }
 
 impl Map {
@@ -73,25 +63,37 @@ impl Map {
         self.obstacles[position.0 as usize][position.1 as usize]
     }
 
-    fn move_until_out_of_bounds(&mut self) {
+    fn move_until_out_of_bounds_or_loop(
+        &self,
+        additional_obstacle: Option<(isize, isize)>,
+    ) -> (bool, HashSet<(isize, isize, Direction)>) {
+        let mut possition = self.start_position;
+        let mut direction = self.start_direction.clone();
+        let mut visited_positions = HashSet::new();
+        visited_positions.insert((possition.0, possition.1, direction.clone()));
+
         loop {
             let mut next_position;
             loop {
-                next_position = self.direction.move_forward(self.position);
+                next_position = direction.move_forward(possition);
                 if self.is_out_of_bounds(next_position) {
-                    return;
+                    return (false, visited_positions);
                 }
-                if self.is_obstacle(next_position) {
-                    self.direction = self.direction.turn_right();
+                if self.is_obstacle(next_position) || Some(next_position) == additional_obstacle {
+                    direction = direction.turn_right();
                 } else {
                     break;
                 }
             }
 
-            self.position = next_position;
+            possition = next_position;
 
-            self.visited_positions
-                .push((self.position.0, self.position.1, self.direction.clone()));
+            // Loop Detection
+            if visited_positions.contains(&(possition.0, possition.1, direction.clone())) {
+                return (true, visited_positions);
+            }
+
+            visited_positions.insert((possition.0, possition.1, direction.clone()));
         }
     }
 }
@@ -103,7 +105,7 @@ struct Day {}
 
 impl AoCDay<Input, Output> for Day {
     fn parse_input(&self, id: &str) -> Result<Input, Box<dyn Error>> {
-        let mut visited_positions = vec![];
+        let mut start_position = (0, 0);
 
         let obstacles = get_reader(id)?
             .lines()
@@ -116,7 +118,7 @@ impl AoCDay<Input, Output> for Day {
                         '#' => Ok(true),
                         '.' => Ok(false),
                         '^' => {
-                            visited_positions.push((y as isize, x as isize, Direction::N));
+                            start_position = (y as isize, x as isize);
                             Ok(false)
                         }
                         _ => Err("Invalid input"),
@@ -125,21 +127,16 @@ impl AoCDay<Input, Output> for Day {
             })
             .collect::<std::result::Result<_, _>>()?;
 
-        let position = visited_positions.first().ok_or("No start position found")?;
-
         Ok(Map {
-            direction: Direction::N,
-            position: (position.0, position.1),
+            start_direction: Direction::N,
+            start_position,
             obstacles,
-            visited_positions,
         })
     }
 
     fn part1(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
-        let mut input = input.clone();
-        input.move_until_out_of_bounds();
-        Ok(input
-            .visited_positions
+        let (_, visited_positions_and_directions) = input.move_until_out_of_bounds_or_loop(None);
+        Ok(visited_positions_and_directions
             .iter()
             .map(|(y, x, _)| (y, x))
             .collect::<HashSet<_>>()
@@ -147,19 +144,17 @@ impl AoCDay<Input, Output> for Day {
     }
 
     fn part2(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
-        let mut input = input.clone();
-        input.move_until_out_of_bounds();
-
-        Ok(input
-            .visited_positions
+        let (_, visited_positions_and_directions) = input.move_until_out_of_bounds_or_loop(None);
+        let visited_positions = visited_positions_and_directions
             .iter()
-            .enumerate()
-            .filter(|(i, (y, x, d))| {
-                let possible_loop_target = match d {
-                    Direction::N => (y + 1, x + 1, Direction::E),
-                    Direction::E => (y + 1, x - 1, Direction::S),
-                    
-                }
+            .map(|(y, x, _)| (y, x))
+            .collect::<HashSet<_>>();
+
+        Ok(visited_positions
+            .par_iter()
+            .filter(|(&y, &x)| {
+                let (contains_loop, _) = input.move_until_out_of_bounds_or_loop(Some((y, x)));
+                contains_loop
             })
             .count())
     }
