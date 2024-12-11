@@ -28,39 +28,36 @@ fn split_number(n: usize) -> Option<(usize, usize)> {
     Some((left_part, right_part))
 }
 
-fn map_number(x: usize) -> Vec<usize> {
+fn map_number(x: usize) -> (usize, Option<usize>) {
     if x == 0 {
-        vec![1]
+        (1, None)
     } else if let Some((a, b)) = split_number(x) {
-        vec![a, b]
+        (a, Some(b))
     } else {
-        vec![x * 2024]
+        (x * 2024, None)
     }
 }
 
 fn len_after_blinks(
-    numbers: Vec<usize>,
+    number: usize,
     blinks_left: usize,
     seen: &mut HashMap<(usize, usize), usize>,
 ) -> usize {
     if blinks_left == 0 {
-        return numbers.len();
+        return 1;
     }
 
-    numbers
-        .iter()
-        .map(|x| {
-            if let Some(known_len) = seen.get(&(*x, blinks_left)) {
-                return *known_len;
-            }
+    let key = (number, blinks_left);
+    if let Some(known_len) = seen.get(&key) {
+        return *known_len;
+    }
 
-            let len = len_after_blinks(map_number(*x), blinks_left - 1, seen);
+    let (a, b) = map_number(number);
+    let len = len_after_blinks(a, blinks_left - 1, seen)
+        + b.map_or(0, |x| len_after_blinks(x, blinks_left - 1, seen));
 
-            seen.insert((*x, blinks_left), len);
-
-            len
-        })
-        .sum()
+    seen.insert(key, len);
+    len
 }
 
 struct Day {}
@@ -77,11 +74,13 @@ impl AoCDay<Input, Output> for Day {
     }
 
     fn part1(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
-        Ok(len_after_blinks(input.clone(), 25, &mut HashMap::new()))
+        let seen = &mut HashMap::new();
+        Ok(input.iter().map(|x| len_after_blinks(*x, 25, seen)).sum())
     }
 
     fn part2(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
-        Ok(len_after_blinks(input.clone(), 75, &mut HashMap::new()))
+        let seen = &mut HashMap::new();
+        Ok(input.iter().map(|x| len_after_blinks(*x, 75, seen)).sum())
     }
 }
 
