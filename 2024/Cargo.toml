@@ -7,6 +7,7 @@ edition = "2021"
 regex = "1.11.1"
 is_sorted = "0.1.1"
 rayon = "1.10.0"
+hashbrown = "0.15.1"
 
 [[bin]]
 name = "day01"
@@ -51,3 +52,7 @@ path = "src/day10.rs"
 [[bin]]
 name = "day11"
 path = "src/day11.rs"
+
+[[bin]]
+name = "day11_map"
+path = "src/day11_map.rs"
