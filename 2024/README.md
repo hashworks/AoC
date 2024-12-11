@@ -68,7 +68,7 @@ Please note that the following numbers are relative, and should only be used to 
 |   08 |  41.918µs |  52.208µs | 168.617µs |             |
 |   09 | 875.487µs | 418.849ms |  29.772ms | brute force |
 |   10 |  42.760µs | 346.121µs | 174.288µs |             |
-|   11 |  12.493µs | 439.567µs |  14.857ms |             |
+|   11 |  12.493µs | 432.634µs |  13.627ms |             |
 |   12 |           |           |           |             |
 |   13 |           |           |           |             |
 |   14 |           |           |           |             |
