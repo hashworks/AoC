@@ -37,7 +37,7 @@ Times are normalized from input download to correct answer, not the time on the 
 |   09 | 00:37:26 |        8754 | 01:33:13 |        6521 |       |
 |   10 | 00:33:11 |       17323 | 00:34:53 |       16306 |       |
 |   11 | 00:21:18 |       21968 | 03:32:15 |       19531 |       |
-|   12 |          |             |          |             |       |
+|   12 | 00:44:31 |       20042 |    later |       14517 |       |
 |   13 |          |             |          |             |       |
 |   14 |          |             |          |             |       |
 |   15 |          |             |          |             |       |
@@ -69,7 +69,7 @@ Please note that the following numbers are relative, and should only be used to 
 |   09 | 875.487µs | 418.849ms |  29.772ms | brute force |
 |   10 |  42.760µs | 346.121µs | 174.288µs |             |
 |   11 |  12.493µs | 432.634µs |  13.627ms |             |
-|   12 |           |           |           |             |
+|   12 |  71.304µs |   3.011ms |   2.718ms |             |
 |   13 |           |           |           |             |
 |   14 |           |           |           |             |
 |   15 |           |           |           |             |
