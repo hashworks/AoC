@@ -1,6 +1,5 @@
 mod util;
 
-use hashbrown::hash_map::Keys;
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
 use std::{error::Error, io::BufRead};
 use util::{aoc::AoCDay, input::get_reader};

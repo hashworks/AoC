@@ -1,6 +1,5 @@
 mod util;
 
-use rayon::iter::ParallelBridge;
 use std::{error::Error, fmt::Debug, io::BufRead, ops::Range};
 use util::{aoc::AoCDay, input::get_reader};
 
