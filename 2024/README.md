@@ -66,7 +66,7 @@ Please note that the following numbers are relative, and should only be used to 
 |   09 |  92.665µs | 674.419µs | 119.509ms | brute force |
 |   07 | 339.549µs | 472.799µs |  18.917ms |             |
 |   08 |  41.918µs |  52.208µs | 168.617µs |             |
-|   09 | 875.487µs | 418.849ms |  29.772ms | brute force |
+|   09 | 885.015µs | 939.037µs |  21.743ms |             |
 |   10 |  42.760µs | 346.121µs | 174.288µs |             |
 |   11 |  12.493µs | 432.634µs |  13.627ms |             |
 |   12 |  71.304µs |   3.011ms |   2.718ms |             |

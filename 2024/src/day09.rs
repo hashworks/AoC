@@ -1,5 +1,6 @@
 mod util;
 
+use rayon::iter::ParallelBridge;
 use std::{error::Error, fmt::Debug, io::BufRead, ops::Range};
 use util::{aoc::AoCDay, input::get_reader};
 
@@ -57,19 +58,27 @@ impl AoCDay<Input, Output> for Day {
     fn part1(&self, input: &Input) -> Result<Output, Box<dyn Error>> {
         let mut compacted_disk = input.clone();
 
+        let mut min_j = 0;
+
         input
             .iter()
             .enumerate()
             .rev()
             .filter(|(_, state)| state != &&State::FreeSpace)
             .for_each(|(i, data)| {
-                if let Some(free_disk_space) = compacted_disk
+                if i < min_j {
+                    return;
+                }
+                if let Some((j, free_disk_space)) = compacted_disk
                     .iter_mut()
-                    .take(i)
-                    .find(|s| s == &&State::FreeSpace)
+                    .enumerate()
+                    .skip(min_j)
+                    .take(i - min_j)
+                    .find(|(_, s)| s == &&State::FreeSpace)
                 {
                     *free_disk_space = data.clone();
                     compacted_disk[i] = State::FreeSpace;
+                    min_j = j;
                 }
             });
 
