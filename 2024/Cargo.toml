@@ -8,6 +8,7 @@ regex = "1.11.1"
 is_sorted = "0.1.1"
 rayon = "1.10.0"
 hashbrown = "0.15.1"
+pathfinding = "4.12.0"
 
 [[bin]]
 name = "day01"
@@ -72,3 +73,7 @@ path = "src/day14.rs"
 [[bin]]
 name = "day15"
 path = "src/day15.rs"
+
+[[bin]]
+name = "day16"
+path = "src/day16.rs"

@@ -41,7 +41,7 @@ Times are normalized from input download to correct answer, not the time on the 
 |   13 |    later |       28728 |    later |       23186 |       |
 |   14 | 00:52:59 |       18356 | 01:24:56 |       14648 |       |
 |   15 |    later |       24765 |    later |       17794 |       |
-|   16 |          |             |          |             |       |
+|   16 | 00:34:05 |       11271 |    later |        8678 |       |
 |   17 |          |             |          |             |       |
 |   18 |          |             |          |             |       |
 |   19 |          |             |          |             |       |
@@ -73,7 +73,7 @@ Please note that the following numbers are relative, and should only be used to 
 |   13 | 123.994µs |   2.926µs |   2.525µs |             |
 |   14 |  64.952µs |   6.722µs |  16.433ms |             |
 |   15 | 246.815µs | 190.278µs | 691.331µs |             |
-|   16 |           |           |           |             |
+|   16 | 141.867µs |   5.116ms |  11.236ms |             |
 |   17 |           |           |           |             |
 |   18 |           |           |           |             |
 |   19 |           |           |           |             |
