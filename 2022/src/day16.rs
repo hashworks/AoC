@@ -7,9 +7,7 @@ use nom::multi::separated_list1;
 use nom::sequence::pair;
 use nom::{sequence::tuple, IResult};
 use pathfinding::prelude::bfs;
-use rayon::prelude::IntoParallelRefIterator;
 
-use std::collections::HashSet;
 use std::io::BufRead;
 use std::{collections::HashMap, error::Error};
 use util::{aoc::AoCDay, input::get_reader};
@@ -140,7 +138,7 @@ fn max_pressure_pair(
     opened_valves.push(position_one);
 
     let &(flow_rate, _) = input.get(&position_one).unwrap();
-#
+
     minute_one * flow_rate
         + [
             (position_one, minute_one, position_two, minute_two),
