@@ -24,36 +24,36 @@ cargo test --bin day01
 
 Times are normalized from input download to correct answer, not the time on the website.
 
-|  Day | Part 1 | Rank Part 1 | Part 2 | Rank Part 2 | Notes |
-| ---: | -----: | ----------: | -----: | ----------: | ----: |
-|   01 |        |             |        |             |       |
-|   02 |        |             |        |             |       |
-|   03 |        |             |        |             |       |
-|   04 |        |             |        |             |       |
-|   05 |        |             |        |             |       |
-|   06 |        |             |        |             |       |
-|   07 |        |             |        |             |       |
-|   08 |        |             |        |             |       |
-|   09 |        |             |        |             |       |
-|   10 |        |             |        |             |       |
-|   11 |        |             |        |             |       |
-|   12 |        |             |        |             |       |
+|  Day |   Part 1 |   Part 2 | Notes |
+| ---: | -------: | -------: | ----: |
+|   01 | 00:27:44 | 01:01:44 |       |
+|   02 |          |          |       |
+|   03 |          |          |       |
+|   04 |          |          |       |
+|   05 |          |          |       |
+|   06 |          |          |       |
+|   07 |          |          |       |
+|   08 |          |          |       |
+|   09 |          |          |       |
+|   10 |          |          |       |
+|   11 |          |          |       |
+|   12 |          |          |       |
 
 ## Performance
 
 Please note that the following numbers are relative, and should only be used to compare the performance between commits and days.
 
-|  Day | Parsing | Part 1 | Part 2 | Notes |
-| ---: | ------: | -----: | -----: | ----: |
-|   01 |         |        |        |       |
-|   02 |         |        |        |       |
-|   03 |         |        |        |       |
-|   04 |         |        |        |       |
-|   05 |         |        |        |       |
-|   09 |         |        |        |       |
-|   07 |         |        |        |       |
-|   08 |         |        |        |       |
-|   09 |         |        |        |       |
-|   10 |         |        |        |       |
-|   11 |         |        |        |       |
-|   12 |         |        |        |       |
+|  Day |  Parsing |  Part 1 | Part 2 | Notes |
+| ---: | -------: | ------: | -----: | ----: |
+|   01 | 529.46µs | 33.46µs | 1.28ms |       |
+|   02 |          |         |        |       |
+|   03 |          |         |        |       |
+|   04 |          |         |        |       |
+|   05 |          |         |        |       |
+|   09 |          |         |        |       |
+|   07 |          |         |        |       |
+|   08 |          |         |        |       |
+|   09 |          |         |        |       |
+|   10 |          |         |        |       |
+|   11 |          |         |        |       |
+|   12 |          |         |        |       |
