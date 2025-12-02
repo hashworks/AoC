@@ -27,7 +27,7 @@ Times are normalized from input download to correct answer, not the time on the 
 |  Day |   Part 1 |   Part 2 | Notes |
 | ---: | -------: | -------: | ----: |
 |   01 | 00:27:44 | 01:01:44 |       |
-|   02 |          |          |       |
+|   02 | 00:41:42 | 02:00:37 |       |
 |   03 |          |          |       |
 |   04 |          |          |       |
 |   05 |          |          |       |
@@ -43,17 +43,17 @@ Times are normalized from input download to correct answer, not the time on the 
 
 Please note that the following numbers are relative, and should only be used to compare the performance between commits and days.
 
-|  Day |  Parsing |  Part 1 | Part 2 | Notes |
-| ---: | -------: | ------: | -----: | ----: |
-|   01 | 529.46µs | 33.46µs | 1.28ms |       |
-|   02 |          |         |        |       |
-|   03 |          |         |        |       |
-|   04 |          |         |        |       |
-|   05 |          |         |        |       |
-|   09 |          |         |        |       |
-|   07 |          |         |        |       |
-|   08 |          |         |        |       |
-|   09 |          |         |        |       |
-|   10 |          |         |        |       |
-|   11 |          |         |        |       |
-|   12 |          |         |        |       |
+|  Day |  Parsing |  Part 1 |   Part 2 | Notes |
+| ---: | -------: | ------: | -------: | ----: |
+|   01 | 529.46µs | 33.46µs |   1.28ms |       |
+|   02 |  30.84µs | 40.75ms | 147.19ms |       |
+|   03 |          |         |          |       |
+|   04 |          |         |          |       |
+|   05 |          |         |          |       |
+|   09 |          |         |          |       |
+|   07 |          |         |          |       |
+|   08 |          |         |          |       |
+|   09 |          |         |          |       |
+|   10 |          |         |          |       |
+|   11 |          |         |          |       |
+|   12 |          |         |          |       |
