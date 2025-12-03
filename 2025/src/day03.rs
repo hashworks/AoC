@@ -11,9 +11,7 @@ struct Day {}
 
 impl AoCDay<Input, Output> for Day {
     fn parse_input(&self, id: &str) -> Result<Input, Box<dyn Error>> {
-        let reader = get_reader(id)?;
-
-        reader
+        get_reader(id)?
             .lines()
             .into_iter()
             .map(|l| {

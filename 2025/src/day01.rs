@@ -11,23 +11,20 @@ struct Day {}
 
 impl AoCDay<Input, Output> for Day {
     fn parse_input(&self, id: &str) -> Result<Input, Box<dyn Error>> {
-        let reader = get_reader(id)?;
-
-        Ok(reader
+        get_reader(id)?
             .lines()
             .into_iter()
-            .filter_map(|l| l.ok())
             .map(|l| {
-                let mut chars = l.chars();
-                let direction = chars.next();
-                let number: isize = chars.collect::<String>().parse().unwrap_or(0);
+                let l = l?;
+                let number: isize = l.chars().skip(1).collect::<String>().parse()?;
 
-                match direction {
-                    Some('L') => -number,
-                    _ => number,
+                match l.chars().next() {
+                    Some('L') => Ok(-number),
+                    Some('R') => Ok(number),
+                    _ => Err("foo")?,
                 }
             })
-            .collect())
+            .collect()
     }
 
     fn part1(&self, directions: &Input) -> Result<Output, Box<dyn Error>> {
