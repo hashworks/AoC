@@ -29,7 +29,7 @@ Times are normalized from input download to correct answer, not the time on the 
 |   01 | 00:27:44 | 01:01:44 |       |
 |   02 | 00:41:42 | 02:00:37 |       |
 |   03 | 00:13:35 | 01:09:11 |       |
-|   04 |          |          |       |
+|   04 | 00:19:00 | 00:54:10 |       |
 |   05 |          |          |       |
 |   06 |          |          |       |
 |   07 |          |          |       |
@@ -43,17 +43,17 @@ Times are normalized from input download to correct answer, not the time on the 
 
 Please note that the following numbers are relative, and should only be used to compare the performance between commits and days.
 
-|  Day |  Parsing |  Part 1 |   Part 2 | Notes |
-| ---: | -------: | ------: | -------: | ----: |
-|   01 | 333.72µs | 15.47µs | 443.90µs |       |
-|   02 |  22.52µs | 30.45ms | 126.34ms |       |
-|   03 | 165.15µs | 15.73µs |  39.98µs |       |
-|   04 |          |         |          |       |
-|   05 |          |         |          |       |
-|   09 |          |         |          |       |
-|   07 |          |         |          |       |
-|   08 |          |         |          |       |
-|   09 |          |         |          |       |
-|   10 |          |         |          |       |
-|   11 |          |         |          |       |
-|   12 |          |         |          |       |
+|  Day |  Parsing |   Part 1 |   Part 2 | Notes |
+| ---: | -------: | -------: | -------: | ----: |
+|   01 | 333.72µs |  15.47µs | 443.90µs |       |
+|   02 |  22.52µs |  30.45ms | 126.34ms |       |
+|   03 | 165.15µs |  15.73µs |  39.98µs |       |
+|   04 | 165.14µs | 209.85µs |  26.44ms |       |
+|   05 |          |          |          |       |
+|   09 |          |          |          |       |
+|   07 |          |          |          |       |
+|   08 |          |          |          |       |
+|   09 |          |          |          |       |
+|   10 |          |          |          |       |
+|   11 |          |          |          |       |
+|   12 |          |          |          |       |
