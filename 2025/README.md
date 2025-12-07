@@ -30,8 +30,8 @@ Times are normalized from input download to correct answer, not the time on the 
 |   02 | 00:41:42 | 02:00:37 |       |
 |   03 | 00:13:35 | 01:09:11 |       |
 |   04 | 00:19:00 | 00:54:10 |       |
-|   05 |          |          |       |
-|   06 |          |          |       |
+|   05 |  unknown |  unknown |       |
+|   06 |  unknown |  unknown |       |
 |   07 |          |          |       |
 |   08 |          |          |       |
 |   09 |          |          |       |
@@ -49,8 +49,8 @@ Please note that the following numbers are relative, and should only be used to 
 |   02 |  22.52µs |  30.45ms | 126.34ms |       |
 |   03 | 165.15µs |  15.73µs |  39.98µs |       |
 |   04 | 165.14µs | 209.85µs |  26.44ms |       |
-|   05 |          |          |          |       |
-|   09 |          |          |          |       |
+|   05 | 152.63µs |  89.53µs |  24.40µs |       |
+|   06 |   3.07ms |  94.17µs |  75.44µs |       |
 |   07 |          |          |          |       |
 |   08 |          |          |          |       |
 |   09 |          |          |          |       |
