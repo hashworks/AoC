@@ -48,9 +48,11 @@ impl AoCDay<Input, Output> for Day {
     }
 }
 
-fn merge_ranges(ranges: &mut Vec<RangeInclusive<usize>>) -> Vec<RangeInclusive<usize>> {
+fn merge_ranges<T: Ord + Clone + Copy>(
+    ranges: &mut Vec<RangeInclusive<T>>,
+) -> Vec<RangeInclusive<T>> {
     ranges.sort_by(|a, b| a.start().cmp(b.start()));
-    let mut merged_ranges: Vec<RangeInclusive<usize>> = vec![];
+    let mut merged_ranges: Vec<RangeInclusive<T>> = vec![];
     'rangeLoop: for range in ranges {
         let mut i = 0;
         while i < merged_ranges.len() {
