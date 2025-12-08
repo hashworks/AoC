@@ -32,7 +32,7 @@ Times are normalized from input download to correct answer, not the time on the 
 |   04 | 00:19:00 | 00:54:10 |       |
 |   05 |  unknown |  unknown |       |
 |   06 |  unknown |  unknown |       |
-|   07 |          |          |       |
+|   07 |  unknown |  unknown |       |
 |   08 |          |          |       |
 |   09 |          |          |       |
 |   10 |          |          |       |
@@ -51,7 +51,7 @@ Please note that the following numbers are relative, and should only be used to 
 |   04 | 165.14µs | 209.85µs |  26.44ms |       |
 |   05 | 152.63µs |  89.53µs |  24.40µs |       |
 |   06 |   3.07ms |  94.17µs |  75.44µs |       |
-|   07 |          |          |          |       |
+|   07 |  86.26µs | 334.97µs | 312.42µs |       |
 |   08 |          |          |          |       |
 |   09 |          |          |          |       |
 |   10 |          |          |          |       |
